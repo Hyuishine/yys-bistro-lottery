@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:41:29
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-09 22:48:23
+ * @LastEditTime: 2020-12-09 23:43:59
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -23,6 +23,18 @@ const routes = [
                 path: '/menu',
                 name: 'menu',
                 component: resolve => require(['@/view/menu'], resolve)
+            },
+            {
+                // 统计图
+                path: '/analysis',
+                name: 'analysis',
+                component: resolve => require(['@/view/analysis'], resolve)
+            },
+            {
+                // excel 导入
+                path: '/excel',
+                name: 'excel',
+                component: resolve => require(['@/view/excel'], resolve)
             },
         ]
     }

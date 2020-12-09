@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:24:33
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-09 22:53:11
+ * @LastEditTime: 2020-12-09 23:45:57
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -13,7 +13,10 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import router from "./router";
 import Router from "vue-router";
+import echarts from 'echarts'
+
 Vue.config.productionTip = false
+Vue.prototype.$echarts = echarts
 
 const originalPush = Router.prototype.push;
 Router.prototype.push = function push (location) {
