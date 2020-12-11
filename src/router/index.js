@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:41:29
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-09 23:43:59
+ * @LastEditTime: 2020-12-10 15:05:28
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -15,7 +15,7 @@ Vue.use(Router)
 const routes = [
     {
         path: '/',
-        redirect: '/menu',
+        redirect: '/random',
         component: resolve => require(['@/view/layout'], resolve),
         children: [
             {
@@ -35,6 +35,12 @@ const routes = [
                 path: '/excel',
                 name: 'excel',
                 component: resolve => require(['@/view/excel'], resolve)
+            },
+            {
+                // 抽奖
+                path: '/random',
+                name: 'random',
+                component: resolve => require(['@/view/random'], resolve)
             },
         ]
     }
