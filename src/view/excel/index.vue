@@ -2,12 +2,136 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 23:33:07
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-09 23:44:33
+ * @LastEditTime: 2020-12-13 22:35:48
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
  * @youWant: add you want
 -->
 <template>
-  <h1>excel</h1>
+  <div>
+    <v-stepper alt-labels
+               v-model="currentStep">
+      <!-- 步骤条标题 -->
+      <v-stepper-header>
+        <v-stepper-step v-for="(title,index) in stepTitle"
+                        :key="index"
+                        editable
+                        :complete="currentStep > (index + 1)"
+                        :step="(index + 1)">
+          {{ title }}
+        </v-stepper-step>
+      </v-stepper-header>
+      <v-stepper-items>
+        <v-stepper-content step="1">
+          <v-card hover
+                  style="margin:10px;">
+            <v-file-input multiple
+                          small-chips
+                          truncate-length="15"
+                          @change="importf"></v-file-input>
+          </v-card>
+
+          <v-btn color="primary"
+                 @click="currentStep = 2">
+            导入完成
+          </v-btn>
+        </v-stepper-content>
+
+        <v-stepper-content step="2">
+          <v-card class="mb-12"></v-card>
+
+          <v-btn color="primary"
+                 @click="currentStep = 3">
+            导入完成
+          </v-btn>
+
+          <v-btn text>
+            Cancel
+          </v-btn>
+        </v-stepper-content>
+
+        <v-stepper-content step="3">
+          <v-card class="mb-12"
+                  color="grey lighten-1"
+                  height="200px">
+            <input type="file"
+                   @change="importf" />
+            <div id="demo"></div>
+          </v-card>
+
+          <v-btn color="primary"
+                 @click="currentStep = 1">
+            Continue
+          </v-btn>
+
+          <v-btn text>
+            Cancel
+          </v-btn>
+        </v-stepper-content>
+      </v-stepper-items>
+    </v-stepper>
+
+  </div>
 </template>
+ <script>
+import XLSX from 'xlsx';
+/*
+FileReader共有4种读取方法：
+1.readAsArrayBuffer(file)：将文件读取为ArrayBuffer。
+2.readAsBinaryString(file)：将文件读取为二进制字符串
+3.readAsDataURL(file)：将文件读取为Data URL
+4.readAsText(file, [encoding])：将文件读取为文本，encoding缺省值为'UTF-8'
+             */
+export default {
+  data () {
+    return {
+
+      currentStep: 1,
+      stepTitle: ['导入人员信息', '导入奖池', '导入赞助广告'],
+
+      excelData: null,
+      rABS: null,
+    }
+  },
+  methods: {
+    importf (e) {//导入
+      console.log(e)
+      if (!e.files) {
+        return;
+      }
+      var f = e.files[0];
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var data = e.target.result;
+        if (this.rABS) {
+          this.excelData = XLSX.read(btoa(this.fixdata(data)), {//手动转化
+            type: 'base64'
+          });
+        } else {
+          this.excelData = XLSX.read(data, {
+            type: 'binary'
+          });
+        }
+        //excelData.SheetNames[0]是获取Sheets中第一个Sheet的名字
+        //excelData.Sheets[Sheet名]获取第一个Sheet的数据
+        document.getElementById("demo").innerHTML = JSON.stringify(XLSX.utils.sheet_to_json(this.excelData.Sheets[this.excelData.SheetNames[0]]));
+        console.log(this.excelData)
+      };
+      if (this.rABS) {
+        reader.readAsArrayBuffer(f);
+      } else {
+        reader.readAsBinaryString(f);
+      }
+    },
+    fixdata (data) { //文件流转BinaryString
+      var o = "",
+        l = 0,
+        w = 10240;
+      for (; l < data.byteLength / w; ++l) o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w, l * w + w)));
+      o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w)));
+      return o;
+    }
+  }
+}
+</script>
