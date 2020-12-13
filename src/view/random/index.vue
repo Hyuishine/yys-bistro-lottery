@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-10 15:01:37
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-11 22:45:39
+ * @LastEditTime: 2020-12-12 00:10:16
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -13,13 +13,13 @@
     <div class="random_card_area">
       <v-card v-for="index in 70"
               :key="index"
-              :style="testRandom === index ?  'background-color:red;':''"
+              :style="currentIndex === index ?  'background-color:red;':''"
               class="random_card_content">
         <v-card-title>{{ index }}</v-card-title>
       </v-card>
     </div>
 
-    <p class="test_result">{{ '当前选中'+ testRandom }}</p>
+    <p class="test_result">{{ '当前选中'+ currentIndex }}</p>
     <p class="test_result">{{ '当前速度'+ speed }}</p>
     <v-btn rounded
            dark
@@ -39,13 +39,13 @@ export default {
       randomData: [],
       //! true为开启 按钮则显示停止，false为停止状态，按钮则显示开始
       randomStatus: false,
-      speed: 1000,
+      speed: 500,
 
       // 开始 结束 加速 减速 定时器
       timer_start: null,
       timer_stop: null,
       // !测试数据
-      testRandom: 0
+      currentIndex: 0
     }
   },
   methods: {
@@ -65,9 +65,9 @@ export default {
 
     start () {
       //! 如果速度到1 最大速度了 不再加速
-      this.speed > 1 ? (this.speed -= 100) : (this.speed = 1)
+      this.speed > 1 ? (this.speed -= 50) : (this.speed = 1)
       //! 如果滚动的数 到了最大值 置为0
-      this.testRandom > 70 ? (this.testRandom = 0) : this.testRandom++
+      this.currentIndex > this.randomData.length ? (this.currentIndex = 0) : this.currentIndex++
 
       this.timer_start = setTimeout(() => {
         this.start()
@@ -84,8 +84,7 @@ export default {
       }
 
       //! 如果滚动的数 到了最大值 置为0
-      this.testRandom > 70 ? (this.testRandom = 0) : this.testRandom++
-
+      this.currentIndex > this.randomData.length ? (this.currentIndex = 0) : this.currentIndex++
 
       this.timer_stop = setTimeout(() => {
         this.stop()
