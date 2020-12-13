@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:41:29
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-10 15:05:28
+ * @LastEditTime: 2020-12-11 22:58:39
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -15,7 +15,7 @@ Vue.use(Router)
 const routes = [
     {
         path: '/',
-        redirect: '/random',
+        redirect: '/excel',
         component: resolve => require(['@/view/layout'], resolve),
         children: [
             {
