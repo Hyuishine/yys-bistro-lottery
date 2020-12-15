@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 23:33:07
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-13 22:35:48
+ * @LastEditTime: 2020-12-16 00:09:00
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -23,13 +23,15 @@
         </v-stepper-step>
       </v-stepper-header>
       <v-stepper-items>
+        <!-- 步骤一导入数据 -->
         <v-stepper-content step="1">
           <v-card hover
                   style="margin:10px;">
             <v-file-input multiple
                           small-chips
+                          accept=".xlsx"
                           truncate-length="15"
-                          @change="importf"></v-file-input>
+                          @change="importFile"></v-file-input>
           </v-card>
 
           <v-btn color="primary"
@@ -56,7 +58,7 @@
                   color="grey lighten-1"
                   height="200px">
             <input type="file"
-                   @change="importf" />
+                   @change="importFile" />
             <div id="demo"></div>
           </v-card>
 
@@ -88,41 +90,63 @@ export default {
     return {
 
       currentStep: 1,
-      stepTitle: ['导入人员信息', '导入奖池', '导入赞助广告'],
-
+      stepTitle: ['导入人员/奖池', '编辑信息', '导入赞助广告', '编辑赞助广告'],
       excelData: null,
-      rABS: null,
+      // [
+      //   {
+      //     headName: '',
+      //     colunm: []
+      //   }
+      // ],
     }
   },
   methods: {
-    importf (e) {//导入
-      console.log(e)
-      if (!e.files) {
-        return;
-      }
-      var f = e.files[0];
+    importFile (file) {//导入
       var reader = new FileReader();
-      reader.onload = function (e) {
-        var data = e.target.result;
-        if (this.rABS) {
-          this.excelData = XLSX.read(btoa(this.fixdata(data)), {//手动转化
-            type: 'base64'
-          });
-        } else {
-          this.excelData = XLSX.read(data, {
-            type: 'binary'
-          });
-        }
-        //excelData.SheetNames[0]是获取Sheets中第一个Sheet的名字
-        //excelData.Sheets[Sheet名]获取第一个Sheet的数据
-        document.getElementById("demo").innerHTML = JSON.stringify(XLSX.utils.sheet_to_json(this.excelData.Sheets[this.excelData.SheetNames[0]]));
-        console.log(this.excelData)
-      };
-      if (this.rABS) {
-        reader.readAsArrayBuffer(f);
-      } else {
-        reader.readAsBinaryString(f);
+      var temp
+      try {
+        // 读取excel 转换为string
+        reader.onload = function (file) {
+          var data = file.target.result;
+
+          temp = XLSX.read(data, { type: 'binary' });
+          this.excelData = temp = XLSX.utils.sheet_to_json(temp.Sheets[temp.SheetNames[0]]);
+
+          // 多少列
+          Object.keys(temp[0]).forEach((headName, index) => {
+            // headName // 列名
+            // index // 第几列
+            console.log(index)
+            for (var i = 0; i < temp.length; i++) {
+              console.log(temp[i][headName])
+            }
+
+            // console.log(headName)
+            // console.log(index)
+            // temp.forEach((val, index) => {
+            //   val.keys
+            //   console.log(index)
+            // })
+
+
+
+            // this.excelData.push(
+            //   {
+
+            //   }
+            // )
+          })
+
+          console.log(Object.keys(temp[0]))
+          console.log(temp)
+        };
+        reader.readAsBinaryString(file[0]);
+
+
+      } catch (error) {
+        return
       }
+
     },
     fixdata (data) { //文件流转BinaryString
       var o = "",
