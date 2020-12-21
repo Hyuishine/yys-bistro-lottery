@@ -1,3 +1,13 @@
+/*
+ * @Author: 黄宇/hyuishine
+ * @Date: 2020-12-10 13:53:54
+ * @LastEditors: 黄宇/hyuishine
+ * @LastEditTime: 2020-12-21 18:34:01
+ * @Description: 
+ * @Email: hyuishine@gmail.com
+ * @Company: 3xData
+ * @youWant: add you want
+ */
 'use strict'
 
 import { app, protocol, BrowserWindow } from 'electron'
@@ -10,11 +20,12 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
-async function createWindow() {
+async function createWindow () {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 800,
+    // fullscreen: true,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -31,6 +42,8 @@ async function createWindow() {
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
   }
+  // win.maximize()
+  // win.show()
 }
 
 // Quit when all windows are closed.
@@ -52,14 +65,14 @@ app.on('activate', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
-    // Install Vue Devtools
-    try {
-      await installExtension(VUEJS_DEVTOOLS)
-    } catch (e) {
-      console.error('Vue Devtools failed to install:', e.toString())
-    }
-  }
+  // if (isDevelopment && !process.env.IS_TEST) {
+  //   // Install Vue Devtools
+  //     try {
+  //       await installExtension(VUEJS_DEVTOOLS)
+  //     } catch (e) {
+  //       console.error('Vue Devtools failed to install:', e.toString())
+  //     }
+  // }
   createWindow()
 })
 
