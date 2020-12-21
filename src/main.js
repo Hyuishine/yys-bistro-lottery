@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:24:33
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-11 22:58:04
+ * @LastEditTime: 2020-12-17 10:00:38
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -15,6 +15,7 @@ import router from "./router";
 import Router from "vue-router";
 import echarts from 'echarts'
 import XLSX from 'xlsx';
+import store from "./store/index";
 
 Vue.use(XLSX)
 
@@ -29,5 +30,6 @@ Router.prototype.push = function push (location) {
 new Vue({
   vuetify,
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')
