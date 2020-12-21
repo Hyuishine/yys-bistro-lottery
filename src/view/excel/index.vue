@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 23:33:07
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-16 00:09:00
+ * @LastEditTime: 2020-12-21 18:48:48
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -30,6 +30,8 @@
             <v-file-input multiple
                           small-chips
                           accept=".xlsx"
+                          show-size
+                          hint="每次导入均会覆盖原有导入数据"
                           truncate-length="15"
                           @change="importFile"></v-file-input>
           </v-card>
@@ -88,65 +90,37 @@ FileReader共有4种读取方法：
 export default {
   data () {
     return {
-
       currentStep: 1,
-      stepTitle: ['导入人员/奖池', '编辑信息', '导入赞助广告', '编辑赞助广告'],
+      stepTitle: ['导入人员/奖池', '手录/编辑信息', '导入广告', '手录/编辑广告'],
       excelData: null,
-      // [
-      //   {
-      //     headName: '',
-      //     colunm: []
-      //   }
-      // ],
     }
   },
   methods: {
     importFile (file) {//导入
+      if (file.length === 0) {
+        return
+      }
       var reader = new FileReader();
-      var temp
+      var sheetObj
+      var tempArr = []
+      let self = this
+
       try {
         // 读取excel 转换为string
         reader.onload = function (file) {
           var data = file.target.result;
-
-          temp = XLSX.read(data, { type: 'binary' });
-          this.excelData = temp = XLSX.utils.sheet_to_json(temp.Sheets[temp.SheetNames[0]]);
-
-          // 多少列
-          Object.keys(temp[0]).forEach((headName, index) => {
-            // headName // 列名
-            // index // 第几列
-            console.log(index)
-            for (var i = 0; i < temp.length; i++) {
-              console.log(temp[i][headName])
-            }
-
-            // console.log(headName)
-            // console.log(index)
-            // temp.forEach((val, index) => {
-            //   val.keys
-            //   console.log(index)
-            // })
-
-
-
-            // this.excelData.push(
-            //   {
-
-            //   }
-            // )
-          })
-
-          console.log(Object.keys(temp[0]))
-          console.log(temp)
+          sheetObj = XLSX.read(data, { type: 'binary' });
+          // ! 存入store中
+          for (var i = 0; i < sheetObj.SheetNames.length; i++) {
+            tempArr.push(XLSX.utils.sheet_to_json(sheetObj.Sheets[sheetObj.SheetNames[i]]))
+          }
+          self.$store.state.module.sheetData = tempArr
+          console.log(tempArr)
         };
         reader.readAsBinaryString(file[0]);
-
-
       } catch (error) {
         return
       }
-
     },
     fixdata (data) { //文件流转BinaryString
       var o = "",
