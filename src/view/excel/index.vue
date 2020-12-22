@@ -2,134 +2,67 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 23:33:07
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-21 18:48:48
+ * @LastEditTime: 2020-12-22 15:27:09
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
  * @youWant: add you want
 -->
 <template>
-  <div>
-    <v-stepper alt-labels
-               v-model="currentStep">
-      <!-- 步骤条标题 -->
-      <v-stepper-header>
-        <v-stepper-step v-for="(title,index) in stepTitle"
-                        :key="index"
-                        editable
-                        :complete="currentStep > (index + 1)"
-                        :step="(index + 1)">
-          {{ title }}
-        </v-stepper-step>
-      </v-stepper-header>
-      <v-stepper-items>
-        <!-- 步骤一导入数据 -->
-        <v-stepper-content step="1">
+  <v-stepper alt-labels
+             v-model="currentStep">
+    <!-- 步骤条标题 -->
+    <v-stepper-header>
+      <v-stepper-step v-for="(title,index) in stepData.title"
+                      :key="index"
+                      editable
+                      :complete="currentStep > (index + 1)"
+                      :step="(index + 1)">
+        {{ title }}
+      </v-stepper-step>
+    </v-stepper-header>
+    <v-stepper-items>
+      <template v-for="(path,index) in stepData.path">
+        <v-stepper-content :step="index + 1"
+                           :key="index">
           <v-card hover
                   style="margin:10px;">
-            <v-file-input multiple
-                          small-chips
-                          accept=".xlsx"
-                          show-size
-                          hint="每次导入均会覆盖原有导入数据"
-                          truncate-length="15"
-                          @change="importFile"></v-file-input>
+            <components :is="path"></components>
           </v-card>
-
           <v-btn color="primary"
-                 @click="currentStep = 2">
+                 @click="currentStep = (index + 2)">
             导入完成
           </v-btn>
         </v-stepper-content>
-
-        <v-stepper-content step="2">
-          <v-card class="mb-12"></v-card>
-
-          <v-btn color="primary"
-                 @click="currentStep = 3">
-            导入完成
-          </v-btn>
-
-          <v-btn text>
-            Cancel
-          </v-btn>
-        </v-stepper-content>
-
-        <v-stepper-content step="3">
-          <v-card class="mb-12"
-                  color="grey lighten-1"
-                  height="200px">
-            <input type="file"
-                   @change="importFile" />
-            <div id="demo"></div>
-          </v-card>
-
-          <v-btn color="primary"
-                 @click="currentStep = 1">
-            Continue
-          </v-btn>
-
-          <v-btn text>
-            Cancel
-          </v-btn>
-        </v-stepper-content>
-      </v-stepper-items>
-    </v-stepper>
-
-  </div>
+      </template>
+    </v-stepper-items>
+  </v-stepper>
 </template>
  <script>
-import XLSX from 'xlsx';
-/*
-FileReader共有4种读取方法：
-1.readAsArrayBuffer(file)：将文件读取为ArrayBuffer。
-2.readAsBinaryString(file)：将文件读取为二进制字符串
-3.readAsDataURL(file)：将文件读取为Data URL
-4.readAsText(file, [encoding])：将文件读取为文本，encoding缺省值为'UTF-8'
-             */
+const moduleObj = {}; // 储存引入的组件对象 用于 注册组件
+const path = require("path"); // 地址类型
+const files = require.context("./components", true, /\.vue$/); // 正则遍历找出"./components"中的“ .vue ” 结尾的文件
+files.keys().forEach(key => { // 将path 对象变为能用的对象
+  const name = path.basename(key, ".vue"); // 将获取到的文件名 去除后缀，得到该模块的名字
+  moduleObj[name] = files(key).default || files(key); // 将文件对象 以上面得到的该模块的名字 为key值 存为组件对象，用于注册组件
+});
 export default {
   data () {
     return {
       currentStep: 1,
+      stepData: { // 左侧tab页的数据
+        title: [], // 标题数据
+        path: [], // 动态组件可以：is使用的 路径
+      },
       stepTitle: ['导入人员/奖池', '手录/编辑信息', '导入广告', '手录/编辑广告'],
-      excelData: null,
     }
   },
-  methods: {
-    importFile (file) {//导入
-      if (file.length === 0) {
-        return
-      }
-      var reader = new FileReader();
-      var sheetObj
-      var tempArr = []
-      let self = this
-
-      try {
-        // 读取excel 转换为string
-        reader.onload = function (file) {
-          var data = file.target.result;
-          sheetObj = XLSX.read(data, { type: 'binary' });
-          // ! 存入store中
-          for (var i = 0; i < sheetObj.SheetNames.length; i++) {
-            tempArr.push(XLSX.utils.sheet_to_json(sheetObj.Sheets[sheetObj.SheetNames[i]]))
-          }
-          self.$store.state.module.sheetData = tempArr
-          console.log(tempArr)
-        };
-        reader.readAsBinaryString(file[0]);
-      } catch (error) {
-        return
-      }
-    },
-    fixdata (data) { //文件流转BinaryString
-      var o = "",
-        l = 0,
-        w = 10240;
-      for (; l < data.byteLength / w; ++l) o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w, l * w + w)));
-      o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w)));
-      return o;
-    }
+  created () {
+    Object.keys(moduleObj).forEach((item, i) => {
+      // 获取组件对象中的cname值（name值用中文似乎会报错） 作为pane的标题值
+      this.stepData.title.push(moduleObj[Object.keys(moduleObj)[i]].cname)
+      this.stepData.path.push(moduleObj[Object.keys(moduleObj)[i]])
+    })
   }
 }
 </script>
