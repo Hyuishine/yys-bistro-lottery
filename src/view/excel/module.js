@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-17 10:07:59
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-17 10:51:18
+ * @LastEditTime: 2020-12-22 16:25:12
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -11,7 +11,7 @@
 export default {
     state: {
         sheetData: null,
-        columnsName: []
+        sheetName: []
     },
     mutations: {},
     getters: {}
