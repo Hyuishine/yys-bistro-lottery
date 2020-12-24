@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-21 19:17:53
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-23 15:19:20
+ * @LastEditTime: 2020-12-24 16:25:54
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -61,6 +61,9 @@ export default {
       } catch (error) {
         return
       }
+    },
+    exportFile () {
+
     }
   }
 }

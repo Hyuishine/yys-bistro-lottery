@@ -16,8 +16,10 @@ import Router from "vue-router";
 import echarts from 'echarts'
 import XLSX from 'xlsx';
 import store from "./store/index";
+import JSZip from "jszip";
 
 Vue.use(XLSX)
+Vue.use(JSZip)
 
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts

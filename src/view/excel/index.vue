@@ -27,7 +27,8 @@
                            :key="index">
           <v-card hover
                   style="margin:10px;">
-            <components :is="path"></components>
+            <components :is="path"
+                        v-if="(index + 1) === currentStep"></components>
           </v-card>
           <v-btn color="primary"
                  @click="currentStep = (index + 2)">
