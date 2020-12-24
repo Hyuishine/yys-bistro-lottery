@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-25 00:08:29
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-25 00:47:48
+ * @LastEditTime: 2020-12-25 00:51:31
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -18,15 +18,15 @@
               class="random_card_content">
         <v-card-title>{{ name }}</v-card-title>
       </v-card>
-      <p class="test_result">{{ '当前选中'+ currentIndex }}</p>
-      <p class="test_result">{{ '当前速度'+ speed }}</p>
       <v-card-actions>
         <v-btn text
+               :disabled="randomStatus"
                color="warning"
                @click="shuffle()">
           打乱数据
         </v-btn>
         <v-btn text
+               :disabled="randomStatus"
                @click="list = []"
                color="error">
           清空数据

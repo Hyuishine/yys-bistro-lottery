@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-10 13:53:54
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-21 18:34:01
+ * @LastEditTime: 2020-12-25 00:55:20
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -12,7 +12,7 @@
 
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
-import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+// import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Scheme must be registered before the app is ready
