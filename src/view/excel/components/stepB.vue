@@ -46,7 +46,9 @@
 </template>
 <script>
 import JSZip from "jszip";
-
+import template from "../template/test.js";
+import { downloadBlobFile } from "@/utils/utils";
+require('script-loader!file-saver');
 export default {
   name: 'stepTwo',
   cname: '手录/编辑信息',
@@ -100,20 +102,25 @@ export default {
   methods: {
 
     fileCreate () {
-      // const zip = new JSZip();
-      console.log(new JSZip())
-      // zip.files(
-      //   `test`,
-      //   'hello Word'
-      // );
-      // zip.generateAsync({ type: "blob" }).then(
-      //   blob => {
-      //     downloadBlobFile(blob, `模板.zip`);
-      //   },
-      //   err => {
-      //     alert("导出失败");
-      //   }
-      // );
+      const zip = new JSZip();
+      var temp = template('360203-000201004000-GG-019-01', 'https://ganfutong.jiangxi.gov.cn/jmopen/webapp/html5/jdzsgftywsb/index.html')
+      // console.log(new JSZip())
+
+
+
+      zip.file(
+        `index.html`,
+        temp
+      );
+      zip.generateAsync({ type: "blob" }).then(
+        blob => {
+          downloadBlobFile(blob, `pxzggfzz.zip`);
+          // saveAs(blob, `模板.zip`);
+        },
+        err => {
+          console.log(err)
+        }
+      );
     }
   }
 }
