@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-17 09:52:49
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-23 15:26:06
+ * @LastEditTime: 2020-12-24 23:56:53
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -45,6 +45,7 @@
 
 </template>
 <script>
+require('script-loader!file-saver')
 import JSZip from "jszip";
 
 export default {
@@ -98,22 +99,40 @@ export default {
     }
   },
   methods: {
-
+    downloadBlobFile (content, fileName, type) {
+      const blob = new Blob([content], {
+        type: type
+      });
+      if ("download" in document.createElement("a")) {
+        // 非IE下载
+        const elink = document.createElement("a");
+        elink.download = fileName;
+        elink.style.display = "none";
+        elink.href = URL.createObjectURL(blob);
+        document.body.appendChild(elink);
+        elink.click();
+        URL.revokeObjectURL(elink.href); // 释放URL 对象
+        document.body.removeChild(elink);
+      } else {
+        // IE10+下载
+        navigator.msSaveBlob(blob, fileName);
+      }
+    },
     fileCreate () {
-      // const zip = new JSZip();
+      const zip = new JSZip();
       console.log(new JSZip())
-      // zip.files(
-      //   `test`,
-      //   'hello Word'
-      // );
-      // zip.generateAsync({ type: "blob" }).then(
-      //   blob => {
-      //     downloadBlobFile(blob, `模板.zip`);
-      //   },
-      //   err => {
-      //     alert("导出失败");
-      //   }
-      // );
+      zip.files(
+        `test`,
+        'hello Word'
+      );
+      zip.generateAsync({ type: "blob" }).then(
+        (blob) => {
+          this.downloadBlobFile(blob, `模板.zip`);
+        },
+        (err) => {
+          console.log(err)
+        }
+      );
     }
   }
 }
