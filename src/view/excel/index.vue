@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 23:33:07
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-22 15:27:09
+ * @LastEditTime: 2020-12-25 02:41:56
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -30,10 +30,6 @@
             <components :is="path"
                         v-if="(index + 1) === currentStep"></components>
           </v-card>
-          <v-btn color="primary"
-                 @click="currentStep = (index + 2)">
-            导入完成
-          </v-btn>
         </v-stepper-content>
       </template>
     </v-stepper-items>
