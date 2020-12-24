@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-10 15:01:37
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-12 00:10:16
+ * @LastEditTime: 2020-12-23 15:27:10
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -67,7 +67,7 @@ export default {
       //! 如果速度到1 最大速度了 不再加速
       this.speed > 1 ? (this.speed -= 50) : (this.speed = 1)
       //! 如果滚动的数 到了最大值 置为0
-      this.currentIndex > this.randomData.length ? (this.currentIndex = 0) : this.currentIndex++
+      this.currentIndex > 70 ? (this.currentIndex = 0) : this.currentIndex++
 
       this.timer_start = setTimeout(() => {
         this.start()
@@ -84,7 +84,7 @@ export default {
       }
 
       //! 如果滚动的数 到了最大值 置为0
-      this.currentIndex > this.randomData.length ? (this.currentIndex = 0) : this.currentIndex++
+      this.currentIndex > 70 ? (this.currentIndex = 0) : this.currentIndex++
 
       this.timer_stop = setTimeout(() => {
         this.stop()

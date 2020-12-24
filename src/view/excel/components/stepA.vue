@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-21 19:17:53
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-22 16:54:18
+ * @LastEditTime: 2020-12-23 15:19:20
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -35,8 +35,10 @@ export default {
         return
       }
       var reader = new FileReader();
+
       var sheetObj
-      var tempArr = []
+      var sheetData = []
+      var sheetName = []
       let self = this
 
       try {
@@ -44,28 +46,21 @@ export default {
         reader.onload = function (file) {
           var data = file.target.result;
           sheetObj = XLSX.read(data, { type: 'binary' });
-          // ! 存入store中
+          // ! 将导入的excel 数据表，表名存入store中
           for (var i = 0; i < sheetObj.SheetNames.length; i++) {
-            // todo 拿到
-            tempArr.push(XLSX.utils.sheet_to_json(sheetObj.Sheets[sheetObj.SheetNames[i]]))
-            // 
-            console.log(sheetObj.SheetNames[i])
+            sheetData.push(XLSX.utils.sheet_to_json(sheetObj.Sheets[sheetObj.SheetNames[i]]))
+            sheetName.push(sheetObj.SheetNames[i])
           }
-          self.$store.state.module.sheetData = tempArr
-          console.log(tempArr)
+          self.$store.state.module.sheetData = sheetData
+          self.$store.state.module.sheetName = sheetName
+
+          console.log(sheetName)
+          console.log(sheetData)
         };
         reader.readAsBinaryString(file[0]);
       } catch (error) {
         return
       }
-    },
-    fixdata (data) { //文件流转BinaryString
-      var o = "",
-        l = 0,
-        w = 10240;
-      for (; l < data.byteLength / w; ++l) o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w, l * w + w)));
-      o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w)));
-      return o;
     }
   }
 }

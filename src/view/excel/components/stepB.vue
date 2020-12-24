@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-17 09:52:49
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-22 16:34:39
+ * @LastEditTime: 2020-12-23 15:26:06
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -24,7 +24,7 @@
                         class="elevation-1">
             <template v-slot:top>
               <v-toolbar flat>
-                <v-toolbar-title>My CRUD</v-toolbar-title>
+                <v-toolbar-title>标题</v-toolbar-title>
                 <v-divider class="mx-4"
                            inset
                            vertical></v-divider>
@@ -37,7 +37,7 @@
                            class="mb-2"
                            v-bind="attrs"
                            v-on="on">
-                      New Item
+                      手动添加
                     </v-btn>
                   </template>
                   <v-card>
@@ -143,40 +143,42 @@
 export default {
   name: 'stepTwo',
   cname: '手录/编辑信息',
-  data: () => ({
-    dialog: false,
-    dialogDelete: false,
-    headers: [
-      {
-        text: 'Dessert (100g serving)',
-        align: 'start',
-        sortable: false,
-        value: 'name',
-      },
-      { text: 'Calories', value: 'calories' },
-      { text: 'Fat (g)', value: 'fat' },
-      { text: 'Carbs (g)', value: 'carbs' },
-      { text: 'Protein (g)', value: 'protein' },
-      { text: 'Actions', value: 'actions', sortable: false },
-    ],
-    desserts: [],
-    editedIndex: -1,
-    editedItem: {
-      name: '',
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
-    },
-    defaultItem: {
-      name: '',
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
-    },
-  }),
 
+  data () {
+    return {
+      dialog: false,
+      dialogDelete: false,
+      headers: [
+        {
+          text: 'Dessert (100g serving)',
+          align: 'start',
+          sortable: false,
+          value: 'name',
+        },
+        { text: 'Calories', value: 'calories' },
+        { text: 'Fat (g)', value: 'fat' },
+        { text: 'Carbs (g)', value: 'carbs' },
+        { text: 'Protein (g)', value: 'protein' },
+        { text: 'Actions', value: 'actions', sortable: false },
+      ],
+      desserts: [],
+      editedIndex: -1,
+      editedItem: {
+        name: '',
+        calories: 0,
+        fat: 0,
+        carbs: 0,
+        protein: 0,
+      },
+      defaultItem: {
+        name: '',
+        calories: 0,
+        fat: 0,
+        carbs: 0,
+        protein: 0,
+      },
+    }
+  },
   computed: {
     formTitle () {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
