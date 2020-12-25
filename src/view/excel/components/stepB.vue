@@ -192,6 +192,10 @@ export default {
         `${nameSort}/index.html`,
         zipFile
       );
+      zip.file(
+        `${name}.txt`,
+        zipFile
+      );
       zip.generateAsync({ type: "blob" }).then(
         (blob) => {
           // 全程 -- 缩写 .zip
