@@ -18,6 +18,7 @@
                 @change="importFile"></v-file-input>
 </template>
 <script>
+// import { makePy } from '@/utils/nameSort'
 import XLSX from 'xlsx';
 /*
 FileReader共有4种读取方法：
@@ -54,17 +55,14 @@ export default {
           self.$store.state.module.sheetData = sheetData
           self.$store.state.module.sheetName = sheetName
 
-          console.log(sheetName)
-          console.log(sheetData)
+          // console.log(sheetName)
+          // console.log(sheetData)
         };
         reader.readAsBinaryString(file[0]);
       } catch (error) {
         return
       }
     },
-    exportFile () {
-
-    }
   }
 }
 </script>

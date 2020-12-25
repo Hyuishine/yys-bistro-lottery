@@ -41,12 +41,22 @@
                   <v-text-field dense
                                 v-model="sheet.url"
                                 label="请输入该区域链接"></v-text-field>
+                  <v-text-field dense
+                                style="width:100px;"
+                                v-model="sheet.sort"
+                                label="请输入该区域缩写"></v-text-field>
                 </template>
                 <!-- 分割线 -->
                 <v-divider class="mx-4"
                            inset
                            vertical></v-divider>
                 <v-spacer></v-spacer>
+                <v-btn color="success"
+                       dark
+                       @click="getSortName(i)"
+                       class="mb-2">
+                  生成缩写
+                </v-btn>
                 <v-btn color="primary"
                        dark
                        @click="dataToCreate(i)"
@@ -66,7 +76,7 @@
 require('script-loader!file-saver')
 import JSZip from "jszip";
 import widthoutLicense from '../template/widthoutLicense'
-
+import { makePy } from '../utils/nameSort.js'
 export default {
   name: 'stepTwo',
   cname: '生成',
@@ -86,7 +96,7 @@ export default {
         sheetData = sheets[i]
         // 列名
         sheetName = Object.keys(sheetData[i])
-        console.log(sheetName)
+        // console.log(sheetName)
         // 列名转换为表格组件可以用的格式
         sheetName.forEach((item) => {
           headers.push(
@@ -99,6 +109,7 @@ export default {
         //! 存入数据
         this.sheetData.push(
           {
+            sort: '',
             url: '',
             headers: headers,
             data: sheetData
@@ -118,6 +129,7 @@ export default {
       // 表格数据
       sheetData: [
         // {
+        //   sort:'',
         //   url: '',
         //   headers: [],
         //   data: []
@@ -128,6 +140,30 @@ export default {
     }
   },
   methods: {
+
+
+
+
+    getSortName (i) {
+
+      var rowLength = this.sheetData[i].data.length
+
+      for (let index = 0; index < rowLength; index++) {
+        // console.log(this.sheetData[i].data[index].nameSort)
+        var waitFilter = makePy(
+          this.sheetData[i].data[index].Name
+        )
+        // 正则过滤 只保留字母
+        var filter = /[a-zA-Z]+/g;
+        var waitSub = waitFilter.match(filter)
+        // 截取最多16位
+        waitSub = waitSub.join('');
+        waitSub = waitSub.slice(0, 15)
+        //赋值
+        this.sheetData[i].data[index].nameSort = this.sheetData[i].sort + waitSub
+      }
+    },
+
     downloadBlobFile (content, fileName, type) {
       const blob = new Blob([content], {
         type: type
@@ -162,10 +198,7 @@ export default {
         this.curDownload = 0
       } else {
 
-        console.log(this.sheetData[i].data)
-
-
-
+        // console.log(this.sheetData[i].data)
         var downLoadTimer = setTimeout(() => {
           // 当前表.下载到的行
           let code = this.sheetData[i].data[this.curDownload].Code
@@ -175,8 +208,7 @@ export default {
 
           this.curDownload++
           this.dataToCreate(i)
-
-        }, 5000)
+        }, 3000)
       }
     },
     creatFile (i, code, name, nameSort) {
@@ -192,14 +224,15 @@ export default {
         `${nameSort}/index.html`,
         zipFile
       );
-      zip.file(
-        `${name}.txt`,
-        zipFile
-      );
+      // zip.file(
+      //   `${name}.txt`,
+      //   zipFile
+      // );
       zip.generateAsync({ type: "blob" }).then(
         (blob) => {
           // 全程 -- 缩写 .zip
-          this.downloadBlobFile(blob, `${name}--${nameSort}.zip`);
+          // this.downloadBlobFile(blob, `${name}--${nameSort}.zip`);
+          this.downloadBlobFile(blob, `${nameSort}.zip`);
         },
         (err) => {
           console.log(err)
