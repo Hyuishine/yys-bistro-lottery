@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-21 19:17:53
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-24 16:25:54
+ * @LastEditTime: 2020-12-25 02:17:33
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -28,7 +28,7 @@ FileReader共有4种读取方法：
  */
 export default {
   name: 'stepOne',
-  cname: '导入人员/奖池',
+  cname: '导入事项数据',
   methods: {
     importFile (file) {//导入
       if (file.length === 0) {

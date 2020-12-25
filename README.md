@@ -4,7 +4,10 @@
 ```
 npm install
 ```
-
+## Project init background build
+```
+npm install electron:rebuild
+```
 ### Compiles and hot-reloads for development
 ```
 npm run serve
