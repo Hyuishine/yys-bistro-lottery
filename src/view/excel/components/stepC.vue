@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-25 00:08:29
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-25 00:51:31
+ * @LastEditTime: 2020-12-26 13:27:03
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -31,11 +31,21 @@
                color="error">
           清空数据
         </v-btn>
-        <v-btn text
-               @click="startRandom()"
-               color="primary">
-          {{ randomStatus ? '停止' : '开始' }}
-        </v-btn>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn text
+                   :disabled="tootleStatus"
+                   @click="toogleRandom()"
+                   color="primary"
+                   v-bind="attrs"
+                   v-on="on">
+              {{ randomStatus ? '停止' : '开始' }}
+            </v-btn>
+          </template>
+          <span>{{ randomStatus ? 
+            (tootleStatus ? '开启之后10秒钟会放开停止按钮':'点击停止滚动') 
+            : '点击开始。红点开始滚动，开始按钮将会禁用，十秒钟之后才可以手动停止' }}</span>
+        </v-tooltip>
       </v-card-actions>
     </v-card>
     <h1 v-else>暂无数据</h1>
@@ -48,6 +58,8 @@ export default {
   cname: '抽奖',
   data () {
     return {
+      // 开始停止按钮的 可使用状态
+      tootleStatus: false,
       list: [],
       // 抽中的编号
       lucky: 0,
@@ -77,13 +89,18 @@ export default {
   methods: {
     shuffle: function () {
       this.list = _.shuffle(this.list)
-      console.log(this.list)
+      // console.log(this.list)
     },
-    startRandom () {
+    toogleRandom () {
       if (!this.randomStatus) {
         //! 开始
         this.start()
         this.randomStatus = true
+        this.tootleStatus = true
+        var tootleStatus_timer = setTimeout(() => {
+          this.tootleStatus = false
+          clearTimeout(tootleStatus_timer)
+        }, 10000)
       } else {
         //! 停止     
         clearTimeout(this.timer_start)
@@ -95,9 +112,9 @@ export default {
 
     start () {
       //! 如果速度到1 最大速度了 不再加速
-      this.speed > 1 ? (this.speed -= 50) : (this.speed = 1)
+      this.speed > 1 ? (this.speed -= 200) : (this.speed = 1)
       //! 如果滚动的数 到了最大值 置为0
-      this.currentIndex > this.list.length ? (this.currentIndex = 0) : this.currentIndex++
+      this.currentIndex >= this.list.length ? (this.currentIndex = 0) : this.currentIndex++
 
       this.timer_start = setTimeout(() => {
         this.start()
@@ -110,11 +127,15 @@ export default {
       } else {
         clearTimeout(this.timer_stop)
         this.timer_stop = null
+        this.speed = 500
+        if (this.currentIndex >= this.list.length) {
+          this.currentIndex = 0
+        }
         return
       }
 
       //! 如果滚动的数 到了最大值 置为0
-      this.currentIndex > this.list.length ? (this.currentIndex = 0) : this.currentIndex++
+      this.currentIndex >= this.list.length ? (this.currentIndex = 0) : this.currentIndex++
 
       this.timer_stop = setTimeout(() => {
         this.stop()
