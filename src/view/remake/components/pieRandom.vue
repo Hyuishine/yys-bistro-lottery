@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-26 09:04:27
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-26 09:44:35
+ * @LastEditTime: 2020-12-26 11:20:21
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -21,415 +21,194 @@ export default {
   },
   mounted () {
     this.drawPie()
+    setInterval(() => {
+      this.doing()
+    }, 100)
+  },
+  beforeDestroy () {
+    this.pieDom.clear()
+    this.pieDom.dispose()
   },
   methods: {
 
+    doing () {
+      let option = this.pieDom.getOption()
 
-
-
-    _pie1 () {
-      let dataArr = [];
-      for (var i = 0; i < 8; i++) {
-
-        dataArr.push({
-          name: (i + 1).toString(),
-          value: 20,
-          itemStyle: {
-            normal: {
-              color: "rgba(88,142,197,0.4)",
-              borderWidth: 0,
-              borderColor: "rgba(0,0,0,0)"
-            }
-          }
-        })
-
+      let i = option.series[0].data[0].value
+      i++
+      if (i >= 101) {
+        i = 0
       }
-      return dataArr
-
+      option.series[0].data[0].value = i
+      this.pieDom.setOption(option)
     },
-
-    _pie2 () {
-      let dataArr = [];
-      for (var i = 0; i < 8; i++) {
-        if (i % 2 === 0) {
-          dataArr.push({
-            name: (i + 1).toString(),
-            value: 25,
-            itemStyle: {
-              normal: {
-                color: "rgba(88,142,197,0.5)",
-                borderWidth: 0,
-                borderColor: "rgba(0,0,0,0)"
-              }
-            }
-          })
-        } else {
-          dataArr.push({
-            name: (i + 1).toString(),
-            value: 20,
-            itemStyle: {
-              normal: {
-                color: "rgba(0,0,0,0)",
-                borderWidth: 0,
-                borderColor: "rgba(0,0,0,0)"
-              }
-            }
-          })
-        }
-
-      }
-      return dataArr
-
-    },
-
-    _pie3 () {
-      let dataArr = [];
-      for (var i = 0; i < 100; i++) {
-        if (i % 2 === 0) {
-          dataArr.push({
-            name: (i + 1).toString(),
-            value: 25,
-            itemStyle: {
-              normal: {
-                color: "rgb(126,190,255)",
-                borderWidth: 0,
-                borderColor: "rgba(0,0,0,0)"
-              }
-            }
-          })
-        } else {
-          dataArr.push({
-            name: (i + 1).toString(),
-            value: 20,
-            itemStyle: {
-              normal: {
-                color: "rgba(0,0,0,0)",
-                borderWidth: 0,
-                borderColor: "rgba(0,0,0,0)"
-              }
-            }
-          })
-        }
-
-      }
-      return dataArr
-
-    },
-
-    _pieData (data) {
-      //   let _data = data;
-      let dataArr = [];
-      for (var i = 0; i < 5; i++) {
-        if (i === 2) {
-          let dt = (data[0].unit) ? 25 : (Number(data[0].value));
-          dataArr.push({
-            name: (i + 1).toString(),
-            value: dt,
-            itemStyle: {
-              normal: {
-
-                color: new echarts.graphic.LinearGradient(0, 1, 1, 0, [{
-                  offset: 0,
-                  color: 'rgb(147,187,216)'
-                }, {
-                  offset: 1,
-                  color: '#588ec5'
-                }]),
-                borderWidth: 0,
-                borderColor: "rgba(0,0,0,0.4)"
-
-              }
-            }
-          })
-        } else {
-          let dta = (data[0].unit) ? 25 : (1 - Number(data[0].value)) / 4;
-          dataArr.push({
-            name: (i + 1).toString(),
-            value: dta,
-            itemStyle: {
-              normal: {
-                color: "rgba(0,0,0,0)",
-                borderWidth: 0,
-                borderColor: "rgba(0,0,0,0)"
-              }
-            }
-          })
-        }
-
-      }
-      //console.log(dataArr)
-      return dataArr
-    },
-
-
-
-
-
 
     drawPie () {
-
       this.pieDom = echarts.init(
         document.getElementById('pieRandom'),
       )
-      let self = this
+      let i = 0
+      setInterval(() => {
+        i++
+        if (i === 100) i = 0
+      }, 100)
+
+
+      var echartData = [{
+        value: 1,
+        name: '人1'
+      }, {
+        value: 1,
+        name: '人2'
+      }, {
+        value: 1,
+        name: '人3'
+      }, {
+        value: 1,
+        name: '人4'
+      }, {
+        value: 1,
+        name: '人5'
+      }, {
+        value: 1,
+        name: '人6'
+      }, {
+        value: 1,
+        name: '人7'
+      }, {
+        value: 1,
+        name: '人8'
+      }, {
+        value: 1,
+        name: '人9'
+      }, {
+        value: 1,
+        name: '人10'
+      }, {
+        value: 1,
+        name: '人11'
+      }, {
+        value: 1,
+        name: '人12'
+      }, {
+        value: 1,
+        name: '人13'
+      }, {
+        value: 1,
+        name: '人14'
+      }, {
+        value: 1,
+        name: '人15'
+      }, {
+        value: 1,
+        name: '人16'
+      }, {
+        value: 1,
+        name: '人17'
+      }, {
+        value: 1,
+        name: '人18'
+      }, {
+        value: 1,
+        name: '人19'
+      }, {
+        value: 1,
+        name: '人20'
+      }, {
+        value: 1,
+        name: '人21'
+      }, {
+        value: 1,
+        name: '人22'
+      }, {
+        value: 1,
+        name: '人23'
+      }, {
+        value: 1,
+        name: '人24'
+      }, {
+        value: 1,
+        name: '人25'
+      }, {
+        value: 1,
+        name: '人26'
+      }, {
+        value: 1,
+        name: '人27'
+      }, {
+        value: 1,
+        name: '人28'
+      }]
       this.pieDom.setOption({
-        // backgroundColor: '#142468',
-        title: {
-          text: '轮盘抽奖'
+        // backgroundColor: '#0E1327',
+        tooltip: {
+          formatter: "{b}"
         },
+
         series: [
-          //! 三圈圆环
+          //! 指针层
           {
-            type: 'pie',
-            zlevel: 1,
-            silent: true,
-            /*
-            radius
-            饼图的半径。可以为如下类型：
-            number：直接指定外半径值。
-            string：例如，'20%'，表示外半径为可视区尺寸（容器高宽中较小一项）的 20% 长度。
-            Array.<number|string>：数组的第一项是内半径，第二项是外半径。每一项遵从上述 number string 的描述。
-            */
-            radius: ['98%', '97%'],
-            hoverAnimation: false,
-            color: "rgba(88,142,197,0.5)",
-            // animation:false,    //charts3 no
-            label: {
-              normal: {
-                show: false
-              },
-            },
-            labelLine: {
-              normal: {
-                show: false
-              }
-            },
-            data: [1]
-          },
-          {
-            type: 'pie',
-            zlevel: 2,
-            silent: true,
-            radius: ['90%', '91%'],
-            startAngle: 50,
-            hoverAnimation: false,
-            // animation:false,    //charts3 no
-            label: {
-              normal: {
-                show: false
-              },
-            },
-            labelLine: {
-              normal: {
-                show: false
-              }
-            },
-            data: self._pie2()
-          },
-          {
-            type: 'pie',
-            zlevel: 3,
-            silent: true,
-            radius: ['88%', '87%'],
-            label: {
-              normal: {
-                show: false
-              },
-            },
-            labelLine: {
-              normal: {
-                show: false
-              }
-            },
-            data: self._pie2()
-          },
-          {
-            type: 'pie',
-            zlevel: 4,
-            silent: true,
-            radius: ['84%', '83%'],
-            label: {
-              normal: {
-                show: false
-              },
-            },
-            labelLine: {
-              normal: {
-                show: false
-              }
-            },
-            data: self._pie3()
-          },
-          {
-            type: 'pie',
-            zlevel: 5,
-            silent: true,
-            radius: ['80%', '78%'],
-            color: ["#fc8d89", "#46d3f3", "rgba(203,203,203,.2)"],
-            startAngle: 50,
-            hoverAnimation: false,
-            // animation:false,    //charts3 no
-            label: {
-              normal: {
-                show: false
-              },
-            },
-            data: [50, 20, 40]
-          },
-          {
-            name: "",
-            type: 'gauge',
-            splitNumber: 30, //刻度数量
-            min: 0,
-            max: 100,
-            radius: '73%', //图表尺寸
-            center: ['50%', '50%'],
-            startAngle: 90,
-            endAngle: -269.9999,
+            name: "内部指针",
+            type: "gauge",
+            zLevel: 1,
+            // splitNumber: 1,
             axisLine: {
+              show: false
+            },
+            axisLabel: {
               show: false,
-              lineStyle: {
-                width: 0,
-                shadowBlur: 0,
-                color: [
-                  [1, '#0dc2fe']
-                ]
-              }
             },
             axisTick: {
               show: false,
-              lineStyle: {
-                color: 'auto',
-                width: 2
-              },
-              length: 20,
-              splitNumber: 5
             },
             splitLine: {
-              show: true,
-              length: 32,
-              lineStyle: {
-                color: 'auto',
-              }
+              show: false,
             },
-            axisLabel: {
-              show: false
-            },
-            pointer: { //仪表盘指针
-              show: 0,
+            itemStyle: {
+              show: false,
             },
             detail: {
-              show: 0,
-            },
-          },
-          {
-            name: '统计',
-            type: 'gauge',
-            splitNumber: 30, //刻度数量
-            min: 0,
-            max: 100,
-            radius: '68%', //图表尺寸
-            center: ['50%', '50%'],
-            startAngle: 90,
-            endAngle: -269.9999,
-            axisLine: {
-              show: true,
-              lineStyle: {
-                width: 0,
-                shadowBlur: 0,
-                color: [
-                  [0, '#0dc2fe'],
-                  [1, '#0dc2fe']
-                ]
+              offsetCenter: [0, 82],
+              textStyle: {
+                padding: [0, 0, 0, 0],
+                fontSize: 18,
+                fontWeight: '700',
+                color: 'black'
               }
             },
-            axisTick: {
+            startAngle: 0,
+            endAngle: 360,
+            title: { //标题
               show: true,
-              lineStyle: {
-                color: '#0dc2fe',
-                width: 2
-              },
-              length: 20,
-              splitNumber: 5
-            },
-            splitLine: {
-              show: true,
-              length: 20,
-              lineStyle: {
-                color: '#0dc2fe',
+              offsetCenter: [0, 46], // x, y，单位px
+              textStyle: {
+                color: "white",
+                fontSize: 14, //表盘上的标题文字大小
+                fontWeight: 400,
               }
-            },
-            axisLabel: {
-              show: false
-            },
-            pointer: { //仪表盘指针
-              show: 0,
-            },
-            detail: {
-              borderColor: '#fff',
-              shadowColor: '#fff', //默认透明
-              shadowBlur: 2,
-              offsetCenter: [0, '0%'], // x, y，单位px
-              textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
-                color: '#fff',
-                fontSize: 50,
-              },
-              formatter: '{value}'
             },
             data: [{
-              name: "",
-              value: 2020
-            }]
+            //   name: "选中的人",
+              value: 90,
+            }],
+            //! 指针
+            pointer: {
+              show: true,
+              length: '55%',
+              radius: '50%',
+              width: 10, //指针粗细
+            },
+            animationDuration: 4000,
           },
           {
+            name: '人员池',
             type: 'pie',
-            zlevel: 20,
-            silent: true,
-            radius: ['60%', '59%'],
+            radius: ['40%', '50%'],
             hoverAnimation: false,
-            color: '#2dc0c9',
-            // animation:false,
-            data: [1],
             labelLine: {
-              normal: {
-                show: false
-              }
-            }
-          },
-          {
-            name: '中间环形图',
-            type: 'pie',
-            radius: ['35%', '55%'],
-            avoidLabelOverlap: false,
-            hoverAnimation: false,
-            itemStyle: {
-              normal: {
-                color: '#80ADD2',
-                borderColor: '#3D4268',
-              }
+              show: false
             },
-            label: {
-              normal: {
-                show: false,
-                position: 'center',
-
-              },
-              emphasis: {
-                show: true,
-                textStyle: {
-                  fontSize: '30',
-                  fontWeight: 'bold'
-                }
-              }
-            },
-            labelLine: {
-              normal: {
-                show: false
-              }
-            },
-            data: [
-              25, 25, 25, 25, 25, 25
-            ]
+            data: echartData
           },
         ]
       })
