@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-17 09:52:49
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-25 03:21:06
+ * @LastEditTime: 2020-12-26 17:18:55
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -33,7 +33,8 @@
                   :key="i">
         <v-card flat>
           <v-data-table :headers="sheet.headers"
-                        :items="sheet.data">
+                        :items="sheet.data"
+                        @dblclick:row="rowClick">
             <!-- 顶部 -->
             <template v-slot:top>
               <v-toolbar flat>
@@ -141,7 +142,25 @@ export default {
   },
   methods: {
 
+    rowClick (e, row) {
+      console.log(e)
+      console.log(row.item.Name)
 
+
+      var tag = document.createElement('input');
+      tag.setAttribute('id', 'copy_dom');
+      tag.value = row.item.Code;
+      document.getElementsByTagName('body')[0].appendChild(tag);
+      document.getElementById('copy_dom').select();
+      document.execCommand('copy');
+      // tag.value = row.item.Name
+      // document.getElementById('copy_dom').value = row.item.Name;
+      // document.getElementById('copy_dom').select();
+      // document.execCommand('copy');
+
+
+      document.getElementById('copy_dom').remove();
+    },
 
 
     getSortName (i) {

@@ -1,3 +1,13 @@
+/*
+ * @Author: 黄宇/hyuishine
+ * @Date: 2020-12-26 14:08:36
+ * @LastEditors: 黄宇/hyuishine
+ * @LastEditTime: 2020-12-26 14:34:24
+ * @Description: 
+ * @Email: hyuishine@gmail.com
+ * @Company: 3xData
+ * @youWant: add you want
+ */
 export default (url, code) => {
     var template = `
 <!DOCTYPE html>
@@ -11,9 +21,9 @@ export default (url, code) => {
 <body>
 	<script>
 		var itemCode = "${code}"
-		var url = "${url}";
+		var url = "http://${url}";
 		if (location.protocol === "https:") {
-			url = "${url}";
+			url = "https://${url}";
 		}
 		if (location.search) {
 			url = url + location.search + "&itemCode=" + itemCode;

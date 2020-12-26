@@ -1,3 +1,14 @@
+/*
+ * @Author: 黄宇/hyuishine
+ * @Date: 2020-12-26 14:08:36
+ * @LastEditors: 黄宇/hyuishine
+ * @LastEditTime: 2020-12-26 14:14:37
+ * @Description: 
+ * @Email: hyuishine@gmail.com
+ * @Company: 3xData
+ * @youWant: add you want
+ */
+/* eslint-disable no-dupe-keys */
 //参数,中文字符串
 //返回值:拼音首字母串数组
 export function makePy (str) {
