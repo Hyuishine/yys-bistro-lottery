@@ -1,13 +1,14 @@
 <!--
  * @Author: 黄宇/hyuishine
- * @Date: 2020-12-21 19:17:53
+ * @Date: 2020-12-26 17:55:15
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-26 17:54:48
+ * @LastEditTime: 2020-12-26 18:14:12
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
  * @youWant: add you want
 -->
+
 <template>
   <v-file-input multiple
                 small-chips
@@ -27,8 +28,7 @@ FileReader共有4种读取方法：
 4.readAsText(file, [encoding])：将文件读取为文本，encoding缺省值为'UTF-8'
  */
 export default {
-  name: 'stepOne',
-  cname: '导入名单',
+  name: 'component_importExcel',
   methods: {
     importFile (file) {//导入
       if (file.length === 0) {

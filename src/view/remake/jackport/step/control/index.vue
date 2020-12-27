@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-26 12:14:32
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-26 12:14:56
+ * @LastEditTime: 2020-12-26 17:45:03
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -11,10 +11,7 @@
 <template>
   <v-row justify='space-between'>
     <v-col>
-      <v-btn text
-             color="primary">
-        导入excel
-      </v-btn>
+      <import-excel></import-excel>
     </v-col>
     <v-col>
       <v-btn color="success"
@@ -30,3 +27,18 @@
     </v-col>
   </v-row>
 </template>
+<script>
+import importExcel from './excel'
+export default {
+  components: {
+    importExcel
+  },
+  data () {
+    return {
+
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+</style>

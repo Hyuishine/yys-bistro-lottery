@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-26 11:24:24
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-26 11:25:09
+ * @LastEditTime: 2020-12-26 17:26:30
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -13,13 +13,11 @@
     <transition enter-active-class="animate__slideInUp">
       <v-card-title>
         {{ txt_title }}
-      </v-card-title>
-      <v-card-actions>
-        <v-btn color="orange lighten-2"
+        <v-btn color="primary"
                text>
-          Explore
+          导入数据
         </v-btn>
-      </v-card-actions>
+      </v-card-title>
     </transition>
   </v-card>
 </template>
@@ -27,7 +25,7 @@
 export default {
   data () {
     return {
-      txt_title: '1'
+      txt_title: '赞助广告滚动栏'
     }
   }
 }
