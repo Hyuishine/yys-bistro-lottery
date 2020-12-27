@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-25 00:08:29
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-26 13:27:03
+ * @LastEditTime: 2020-12-27 16:09:29
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -14,7 +14,7 @@
             v-if="list.length > 0">
       <v-card v-for="(name,index) in list"
               :key="index"
-              :style="currentIndex === index ?  'background-color:red;':''"
+              :style="currentIndex === index ?  'background-color:red;color:white;':''"
               class="random_card_content">
         <v-card-title>{{ name }}</v-card-title>
       </v-card>
@@ -31,20 +31,23 @@
                color="error">
           清空数据
         </v-btn>
+        <v-btn text
+               :disabled="tootleStatus"
+               @click="toogleRandom()"
+               color="primary">
+          {{ randomStatus ? '停止' : '开始' }}
+        </v-btn>
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn text
-                   :disabled="tootleStatus"
-                   @click="toogleRandom()"
                    color="primary"
                    v-bind="attrs"
                    v-on="on">
-              {{ randomStatus ? '停止' : '开始' }}
+              使用说明
             </v-btn>
           </template>
-          <span>{{ randomStatus ? 
-            (tootleStatus ? '开启之后10秒钟会放开停止按钮':'点击停止滚动') 
-            : '点击开始。红点开始滚动，开始按钮将会禁用，十秒钟之后才可以手动停止' }}</span>
+          <span>点击开始。红点开始滚动，停止按钮将会随机禁用0~5秒。<br>
+            点击停止，红点将会随机在0~30秒内停止滚动 </span>
         </v-tooltip>
       </v-card-actions>
     </v-card>
@@ -67,7 +70,8 @@ export default {
       //! true为开启 按钮则显示停止，false为停止状态，按钮则显示开始
       randomStatus: false,
       speed: 500,
-
+      // 单位毫秒，速度到多少毫秒一格之后停止
+      speedToStop: 1000,
       // 开始 结束 加速 减速 定时器
       timer_start: null,
       timer_stop: null,
@@ -97,10 +101,15 @@ export default {
         this.start()
         this.randomStatus = true
         this.tootleStatus = true
+        //随机出放开停止按钮  0 - 5秒
+        var disabledTime = Math.round(Math.random() * 5000)
+        // 随机出停止速度到多少毫秒滚动一格时 停止 最大30秒（100 + 200 序列加到2500）
+        this.speedToStop = Math.round(Math.random() * 2500)
         var tootleStatus_timer = setTimeout(() => {
           this.tootleStatus = false
           clearTimeout(tootleStatus_timer)
-        }, 10000)
+        }, disabledTime)
+
       } else {
         //! 停止     
         clearTimeout(this.timer_start)
@@ -112,7 +121,7 @@ export default {
 
     start () {
       //! 如果速度到1 最大速度了 不再加速
-      this.speed > 1 ? (this.speed -= 200) : (this.speed = 1)
+      this.speed > 1 ? (this.speed -= 100) : (this.speed = 1)
       //! 如果滚动的数 到了最大值 置为0
       this.currentIndex >= this.list.length ? (this.currentIndex = 0) : this.currentIndex++
 
@@ -122,12 +131,13 @@ export default {
     },
     stop () {
       //! 如果速度到最小速度了  不再减速
-      if (this.speed < 1000) {
+      if (this.speed < this.speedToStop) {
         this.speed += 100
       } else {
         clearTimeout(this.timer_stop)
         this.timer_stop = null
         this.speed = 500
+        //! 防止停止时刚好不在范围内
         if (this.currentIndex >= this.list.length) {
           this.currentIndex = 0
         }
@@ -150,7 +160,7 @@ export default {
     flex-wrap: wrap;
     display: flex;
     .random_card_content {
-      transition: 0.5s all;
+      transition: 0.5s ease-in-out all;
       margin: 10px;
     }
   }
