@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 23:33:07
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-25 00:23:43
+ * @LastEditTime: 2020-12-27 16:19:26
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -28,6 +28,7 @@
           <v-card hover
                   style="margin:10px;">
             <components :is="path"
+                        @exportComplete="currentStep = 2"
                         v-if="(index + 1) === currentStep"></components>
           </v-card>
         </v-stepper-content>
