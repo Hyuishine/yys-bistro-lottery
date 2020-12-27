@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-17 09:52:49
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-26 17:18:55
+ * @LastEditTime: 2020-12-27 17:47:41
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -28,13 +28,14 @@
       <v-tab v-for="(name,i) in sheetName"
              :key="i"
              dense>{{ name }}</v-tab>
-      <!-- 表数据 -->
       <v-tab-item v-for="(sheet,i) in sheetData"
                   :key="i">
         <v-card flat>
+          <!-- 表数据 -->
           <v-data-table :headers="sheet.headers"
                         :items="sheet.data"
-                        @dblclick:row="rowClick">
+                        @dblclick:row="copyName"
+                        @contextmenu:row="copyCode">
             <!-- 顶部 -->
             <template v-slot:top>
               <v-toolbar flat>
@@ -118,7 +119,9 @@ export default {
         )
       }
     } catch (error) {
-      return false
+      console.log('获取excel数据失败，请重新导入试试。')
+      console.log('列名：Name，Code，nameSort')
+      console.log(error)
     }
   },
   data () {
@@ -142,26 +145,24 @@ export default {
   },
   methods: {
 
-    rowClick (e, row) {
-      console.log(e)
-      console.log(row.item.Name)
-
-
+    copyName (e, row) {
       var tag = document.createElement('input');
-      tag.setAttribute('id', 'copy_dom');
+      tag.setAttribute('id', 'copyName_dom');
+      tag.value = row.item.Name;
+      document.getElementsByTagName('body')[0].appendChild(tag);
+      document.getElementById('copyName_dom').select();
+      document.execCommand('copy');
+      document.getElementById('copyName_dom').remove();
+    },
+    copyCode (e, row) {
+      var tag = document.createElement('input');
+      tag.setAttribute('id', 'copyName_dom');
       tag.value = row.item.Code;
       document.getElementsByTagName('body')[0].appendChild(tag);
-      document.getElementById('copy_dom').select();
+      document.getElementById('copyName_dom').select();
       document.execCommand('copy');
-      // tag.value = row.item.Name
-      // document.getElementById('copy_dom').value = row.item.Name;
-      // document.getElementById('copy_dom').select();
-      // document.execCommand('copy');
-
-
-      document.getElementById('copy_dom').remove();
+      document.getElementById('copyName_dom').remove();
     },
-
 
     getSortName (i) {
 
@@ -216,8 +217,6 @@ export default {
         this.alertStatus = true
         this.curDownload = 0
       } else {
-
-        // console.log(this.sheetData[i].data)
         var downLoadTimer = setTimeout(() => {
           // 当前表.下载到的行
           let code = this.sheetData[i].data[this.curDownload].Code
@@ -231,14 +230,13 @@ export default {
       }
     },
     creatFile (i, code, name, nameSort) {
-
       // 获取生成的代码
       var zipFile = widthoutLicense(this.sheetData[i].url, code)
 
       const zip = new JSZip();
       // 生成代码
       zip.file(
-        // 缩写/index.html
+        // 文件路径:缩写/index.html
         // `${this.sheetName[i]}/${nameSort}/index.html`,
         `${nameSort}/index.html`,
         zipFile
@@ -249,11 +247,15 @@ export default {
       // );
       zip.generateAsync({ type: "blob" }).then(
         (blob) => {
-          // 全程 -- 缩写 .zip
+          // 文件名：缩写 .zip
           // this.downloadBlobFile(blob, `${name}--${nameSort}.zip`);
           this.downloadBlobFile(blob, `${nameSort}.zip`);
         },
         (err) => {
+          console.log('生成文件失败，错误信息如下')
+          console.log('第' + i + '张表的' +
+            (this.curDownload + 1)
+            + '行数据，名称为：' + name + '的事项')
           console.log(err)
         }
       );

@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-21 19:17:53
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-25 02:17:33
+ * @LastEditTime: 2020-12-27 17:32:17
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -59,8 +59,15 @@ export default {
           // console.log(sheetData)
         };
         reader.readAsBinaryString(file[0]);
+        // 上发导入完成事件 让步骤跳到第二步生成
+        var timer = setTimeout(() => {
+          this.$emit('importComplete')
+          clearTimeout(timer)
+        }, 1000)
+
       } catch (error) {
-        return
+        console.log('导入数据失败，错误信息如下：')
+        console.log(error)
       }
     },
   }

@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 23:33:07
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-25 02:41:56
+ * @LastEditTime: 2020-12-27 17:23:54
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -28,6 +28,7 @@
           <v-card hover
                   style="margin:10px;">
             <components :is="path"
+                        @importComplete="currentStep = 2"
                         v-if="(index + 1) === currentStep"></components>
           </v-card>
         </v-stepper-content>
@@ -51,7 +52,6 @@ export default {
         title: [], // 标题数据
         path: [], // 动态组件可以：is使用的 路径
       },
-      stepTitle: ['导入人员/奖池', '手录/编辑信息', '导入广告', '手录/编辑广告'],
     }
   },
   created () {
