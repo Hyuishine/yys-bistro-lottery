@@ -35,17 +35,17 @@
           <v-data-table :headers="sheet.headers"
                         :items="sheet.data"
                         @dblclick:row="copyName"
-                        @contextmenu:row="copyCode">
+                        @contextmenu:row="copySort">
             <!-- 顶部 -->
             <template v-slot:top>
               <v-toolbar flat>
                 <template>
                   <v-text-field dense
-                                v-model="sheet.url"
+                                v-model.trim="sheet.url"
                                 label="请输入该区域链接"></v-text-field>
                   <v-text-field dense
                                 style="width:100px;"
-                                v-model="sheet.sort"
+                                v-model.trim="sheet.sort"
                                 label="请输入该区域缩写"></v-text-field>
                 </template>
                 <!-- 分割线 -->
@@ -148,16 +148,16 @@ export default {
     copyName (e, row) {
       var tag = document.createElement('input');
       tag.setAttribute('id', 'copyName_dom');
-      tag.value = row.item.Name;
+      tag.value = row.item.Name.trim();
       document.getElementsByTagName('body')[0].appendChild(tag);
       document.getElementById('copyName_dom').select();
       document.execCommand('copy');
       document.getElementById('copyName_dom').remove();
     },
-    copyCode (e, row) {
+    copySort (e, row) {
       var tag = document.createElement('input');
       tag.setAttribute('id', 'copyName_dom');
-      tag.value = row.item.Code;
+      tag.value = row.item.nameSort.trim();
       document.getElementsByTagName('body')[0].appendChild(tag);
       document.getElementById('copyName_dom').select();
       document.execCommand('copy');
@@ -207,21 +207,22 @@ export default {
     dataToCreate (i) {
       // 有没有填该地区URL链接
       if (this.sheetData[i].url === '') {
+
         this.alertText = '未填写该地区URL链接'
         this.alertStatus = true
-
       } else if (this.curDownload === this.sheetData[i].data.length) {
+
         clearTimeout(downLoadTimer)
-        this.downLoadTimer
         this.alertText = '该地区已填写完成'
         this.alertStatus = true
         this.curDownload = 0
       } else {
+
         var downLoadTimer = setTimeout(() => {
           // 当前表.下载到的行
-          let code = this.sheetData[i].data[this.curDownload].Code
-          let nameSort = this.sheetData[i].data[this.curDownload].nameSort
-          let name = this.sheetData[i].data[this.curDownload].Name
+          let code = this.sheetData[i].data[this.curDownload].Code.trim()
+          let nameSort = this.sheetData[i].data[this.curDownload].nameSort.trim()
+          let name = this.sheetData[i].data[this.curDownload].Name.trim()
           this.creatFile(i, code, name, nameSort)
 
           this.curDownload++
