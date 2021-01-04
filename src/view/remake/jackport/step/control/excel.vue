@@ -2,161 +2,168 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-26 12:12:05
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2021-01-04 20:48:45
+ * @LastEditTime: 2021-01-04 23:10:17
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
  * @youWant: add you want
 -->
 <template>
-  <v-data-table :headers="headers"
-                :items="desserts"
-                sort-by="calories"
-                class="elevation-1">
-    <template v-slot:top>
-      <v-toolbar flat>
-        <v-toolbar-title>奖池数据表</v-toolbar-title>
-        <v-divider class="mx-4"
-                   inset
-                   vertical></v-divider>
-        <v-spacer></v-spacer>
-        <v-dialog v-model="dialog"
-                  max-width="500px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary"
-                   dark
-                   class="mb-2"
-                   v-bind="attrs"
-                   v-on="on">
-              手动新增
-            </v-btn>
+
+  <v-tabs center-active
+          color="primary"
+          light>
+    <!-- tab栏 有多少个sheet 创多少个 -->
+    <v-tab dense
+           v-for="(name,i) in tabName"
+           :key="i"> {{ name }} </v-tab>
+    <!-- tab页 -->
+    <v-tab-item v-for="(sheet,i) in sheetData"
+                :key="i">
+      <v-card flat>
+        <!-- 数据列表 -->
+        <v-data-table :headers="sheet.headers ? sheet.headers : defalutHeader"
+                      :items="sheet.data ? sheet.data : []">
+          <!-- 表头插槽 -->
+          <template v-slot:top>
+            <v-toolbar flat>
+              <v-spacer></v-spacer>
+              <v-dialog v-model="dialog"
+                        max-width="500px">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn color="primary"
+                         dark
+                         v-bind="attrs"
+                         v-on="on">
+                    手动新增
+                  </v-btn>
+
+                  <v-btn v-for="(item,i) in btnData"
+                         :key="i"
+                         :color="item.color"
+                         @click="headBtnClick(item.method,i)"> {{ item.label }} </v-btn>
+                  <input type="file"
+                         accept=".xlsx"
+                         ref="importFileDom"
+                         style="display: none;"
+                         @change="importFile">
+                </template>
+                <v-card>
+                  <v-card-title>
+                    <span class="headline">{{ formTitle }}</span>
+                  </v-card-title>
+
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12"
+                               sm="6"
+                               md="4"
+                               v-for="(name, i) in sheet.columnName"
+                               :key="i">
+                          <v-text-field v-model="editedItem.name"
+                                        :label="name"></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1"
+                           text
+                           @click="close">
+                      Cancel
+                    </v-btn>
+                    <v-btn color="blue darken-1"
+                           text
+                           @click="save">
+                      Save
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+
+              <v-dialog v-model="dialogDelete"
+                        max-width="500px">
+                <v-card>
+                  <v-card-title class="headline">是否删除</v-card-title>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1"
+                           text
+                           @click="closeDelete">Cancel</v-btn>
+                    <v-btn color="blue darken-1"
+                           text
+                           @click="deleteItemConfirm">OK</v-btn>
+                    <v-spacer></v-spacer>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+
+            </v-toolbar>
           </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">{{ formTitle }}</span>
-            </v-card-title>
+          <!-- 插槽具名写法 对应列名中 value 为 actions 的列 在该列下显示 -->
+          <template v-slot:item.actions="{ item }">
+            <v-icon small
+                    class="mr-2"
+                    @click="editItem(item)">
+              mdi-pencil
+            </v-icon>
+            <v-icon small
+                    @click="deleteItem(item)">
+              mdi-delete
+            </v-icon>
+          </template>
+          <!-- 无数据 -->
+          <template v-slot:no-data>
+            <h1>暂无数据。请导入，或手动新增</h1>
+          </template>
+        </v-data-table>
 
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12"
-                         sm="6"
-                         md="4">
-                    <v-text-field v-model="editedItem.name"
-                                  label="Dessert name"></v-text-field>
-                  </v-col>
-                  <v-col cols="12"
-                         sm="6"
-                         md="4">
-                    <v-text-field v-model="editedItem.calories"
-                                  label="Calories"></v-text-field>
-                  </v-col>
-                  <v-col cols="12"
-                         sm="6"
-                         md="4">
-                    <v-text-field v-model="editedItem.fat"
-                                  label="Fat (g)"></v-text-field>
-                  </v-col>
-                  <v-col cols="12"
-                         sm="6"
-                         md="4">
-                    <v-text-field v-model="editedItem.carbs"
-                                  label="Carbs (g)"></v-text-field>
-                  </v-col>
-                  <v-col cols="12"
-                         sm="6"
-                         md="4">
-                    <v-text-field v-model="editedItem.protein"
-                                  label="Protein (g)"></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1"
-                     text
-                     @click="close">
-                Cancel
-              </v-btn>
-              <v-btn color="blue darken-1"
-                     text
-                     @click="save">
-                Save
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        <v-dialog v-model="dialogDelete"
-                  max-width="500px">
-          <v-card>
-            <v-card-title class="headline">是否删除</v-card-title>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1"
-                     text
-                     @click="closeDelete">Cancel</v-btn>
-              <v-btn color="blue darken-1"
-                     text
-                     @click="deleteItemConfirm">OK</v-btn>
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
-    </template>
-    <template v-slot:item.actions="{ item }">
-      <v-icon small
-              class="mr-2"
-              @click="editItem(item)">
-        mdi-pencil
-      </v-icon>
-      <v-icon small
-              @click="deleteItem(item)">
-        mdi-delete
-      </v-icon>
-    </template>
-    <!-- 无数据 -->
-    <template v-slot:no-data>
-      <v-btn color="primary"
-             @click="test">
-        导入表格
-        <v-icon right
-                dark>
-          mdi-cloud-upload
-        </v-icon>
-      </v-btn>
-      <input type="file"
-             accept=".xlsx"
-             ref="importFileDom"
-             style="display: none;"
-             @change="importFile">
-    </template>
-  </v-data-table>
+      </v-card>
+    </v-tab-item>
+  </v-tabs>
 </template>
 <script>
 import XLSX from 'xlsx';
 
 export default {
   data: () => ({
+
+    sheetData: 1,
+    // [
+    // {
+    //   sort:'',
+    //   url: '',
+    //   headers: [],
+    //   data: [],
+    //   columnName:[]
+    // }
+    // ],
+    // 表格名
+    tabName: ['暂无数据'],
+    btnData: [
+      { label: '导入表格', color: 'warning', method: 'toImportFile' },
+      { label: '添加奖池', color: 'success', method: 'addTab' },
+      { label: '清空该奖池', color: 'error', method: 'delCurrentTab' },
+    ],
+
+    defalutHeader: [
+      { text: '奖品名称', value: '奖品名称' },
+      { text: '数量', value: '数量' },
+      { text: '赞助人', value: '单个价值' },
+      { text: '单个价值', value: '单个价值' },
+    ],
+
+
+
     dialog: false,
     dialogDelete: false,
-    headers: [
-      {
-        text: 'Dessert (100g serving)',
-        align: 'start',
-        sortable: false,
-        value: 'name',
-      },
-      { text: 'Calories', value: 'calories' },
-      { text: 'Fat (g)', value: 'fat' },
-      { text: 'Carbs (g)', value: 'carbs' },
-      { text: 'Protein (g)', value: 'protein' },
-      { text: 'Actions', value: 'actions', sortable: false },
-    ],
+
     desserts: [],
     editedIndex: -1,
+
     editedItem: {
       name: '',
       calories: 0,
@@ -175,7 +182,7 @@ export default {
 
   computed: {
     formTitle () {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+      return this.editedIndex === -1 ? '新增奖品' : '编辑奖品'
     },
   },
 
@@ -193,8 +200,26 @@ export default {
   },
 
   methods: {
-    importFile (e) {//导入
+    //! tab表头按钮点击方法 触发传入的方法名 和当前tab页index值
+    headBtnClick (methodsName, i) {
+      this[methodsName](i)
+    },
+    // 导入数据
+    toImportFile (i) {
+      // console.log(this.$refs.importFileDom[0].dispatchEvent)
+      this.$refs.importFileDom[i].dispatchEvent(new MouseEvent('click'))
+    },
+    // 清空当前表
+    delCurrentTab (i) {
+      console.log(i)
+    },
+    addTab (i) {
+      console.log(i)
+    },
+    // 表格导入
+    importFile (e) {
       const file = e.target.files
+
       if (file.length === 0) {
         return
       }
@@ -215,20 +240,73 @@ export default {
             sheetData.push(XLSX.utils.sheet_to_json(sheetObj.Sheets[sheetObj.SheetNames[i]]))
             sheetName.push(sheetObj.SheetNames[i])
           }
-          self.$store.state.module.sheetData = sheetData
-          self.$store.state.module.sheetName = sheetName
-
-          console.log(sheetName)
-          console.log(sheetData)
+          // 整理数据
+          self.sortData(sheetData, sheetName)
         };
         reader.readAsBinaryString(file[0]);
       } catch (error) {
         return
       }
     },
-    test () {
-      this.$refs.importFileDom.dispatchEvent(new MouseEvent('click'))
+    //! 数据整理
+    sortData (sheetData, sheetName) {
+      this.$store.state.module.sheetData = sheetData
+      this.tabName = this.$store.state.module.sheetName = sheetName
+
+      // console.log(sheetData)
+      // console.log(sheetName)
+
+      // 每个表的信息
+      for (var i = 0; i < sheetData.length; i++) {
+        var headers = []
+        var tabData = []
+        var columnName = []
+        // 表数据
+        tabData = sheetData[i]
+        // 列名
+        columnName = Object.keys(tabData[i])
+        // console.log(sheetName)
+        // 列名转换为表格组件可以用的格式
+        columnName.forEach((item) => {
+          headers.push(
+            {
+              text: item,
+              value: item
+            }
+          )
+        })
+        // 增加操作列
+        headers.push(
+          {
+            text: '操作',
+            value: 'actions',
+          }
+        )
+
+        if (this.sheetData === 1)
+          this.sheetData = []
+
+        //! 存入数据
+        this.sheetData.push(
+          {
+            sort: '',
+            url: '',
+            headers: headers,
+            data: tabData,
+            columnName: columnName
+          }
+        )
+      }
+      console.log(this.sheetData)
     },
+
+
+
+
+
+
+
+
     initialize () {
       this.desserts = [
         {
@@ -238,69 +316,7 @@ export default {
           carbs: 24,
           protein: 4.0,
         },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-        },
-        {
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-        },
-        {
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-        },
-        {
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-        },
-        {
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-        },
-        {
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-        },
+
       ]
     },
 
