@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-26 12:12:05
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2021-01-04 23:10:17
+ * @LastEditTime: 2021-01-05 23:06:43
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -10,20 +10,35 @@
 -->
 <template>
 
-  <v-tabs center-active
+  <v-tabs v-model="currentTab"
+          center-active
           color="primary"
           light>
+
+    <v-dialog max-width="600"
+              v-model="dialog_jackportName">
+      <v-card>
+        <v-toolbar color="primary"
+                   dark>更改奖池名称</v-toolbar>
+        <v-text-field v-model="jackportName"
+                      style="padding:20px;"
+                      label="在此输入奖池名称"></v-text-field>
+      </v-card>
+    </v-dialog>
+
     <!-- tab栏 有多少个sheet 创多少个 -->
     <v-tab dense
            v-for="(name,i) in tabName"
-           :key="i"> {{ name }} </v-tab>
+           :key="i"
+           @dblclick="test(i)"> {{ name }}
+    </v-tab>
     <!-- tab页 -->
     <v-tab-item v-for="(sheet,i) in sheetData"
                 :key="i">
       <v-card flat>
         <!-- 数据列表 -->
-        <v-data-table :headers="sheet.headers ? sheet.headers : defalutHeader"
-                      :items="sheet.data ? sheet.data : []">
+        <v-data-table :headers="sheet.headers"
+                      :items="sheet.data">
           <!-- 表头插槽 -->
           <template v-slot:top>
             <v-toolbar flat>
@@ -37,11 +52,12 @@
                          v-on="on">
                     手动新增
                   </v-btn>
-
+                  <!-- 其他按钮 -->
                   <v-btn v-for="(item,i) in btnData"
                          :key="i"
+                         :disabled="item.disabled"
                          :color="item.color"
-                         @click="headBtnClick(item.method,i)"> {{ item.label }} </v-btn>
+                         @click="headBtnClick(item.method,currentTab)"> {{ item.label }} </v-btn>
                   <input type="file"
                          accept=".xlsx"
                          ref="importFileDom"
@@ -49,6 +65,7 @@
                          @change="importFile">
                 </template>
                 <v-card>
+                  <!-- 新增/编辑弹出框 -->
                   <v-card-title>
                     <span class="headline">{{ formTitle }}</span>
                   </v-card-title>
@@ -131,33 +148,30 @@ import XLSX from 'xlsx';
 export default {
   data: () => ({
 
-    sheetData: 1,
-    // [
-    // {
-    //   sort:'',
-    //   url: '',
-    //   headers: [],
-    //   data: [],
-    //   columnName:[]
-    // }
-    // ],
+    sheetData: null,
     // 表格名
     tabName: ['暂无数据'],
     btnData: [
-      { label: '导入表格', color: 'warning', method: 'toImportFile' },
-      { label: '添加奖池', color: 'success', method: 'addTab' },
-      { label: '清空该奖池', color: 'error', method: 'delCurrentTab' },
+      { label: '导入表格', color: 'warning', method: 'toImportFile', disabled: false },
+      { label: '添加奖池', color: 'success', method: 'addTab', disabled: false },
+      { label: '清空该奖池', color: 'error', method: 'delCurrentTab', disabled: false },
     ],
-
-    defalutHeader: [
-      { text: '奖品名称', value: '奖品名称' },
-      { text: '数量', value: '数量' },
-      { text: '赞助人', value: '单个价值' },
-      { text: '单个价值', value: '单个价值' },
+    currentTab: 0,
+    defaultData: [
+      {
+        headers: [
+          { text: '奖品名称', value: '奖品名称' },
+          { text: '数量', value: '数量' },
+          { text: '赞助人', value: '单个价值' },
+          { text: '单个价值', value: '单个价值' }
+        ],
+        data: [],
+        columnName: ['奖品名称', '数量', '赞助人', '单个价值']
+      }
     ],
-
-
-
+    jackportName: '',
+    // 奖池名称修改弹出框
+    dialog_jackportName: false,
     dialog: false,
     dialogDelete: false,
 
@@ -187,19 +201,44 @@ export default {
   },
 
   watch: {
+    // 如果是最后一个奖池 则不允许清空
+    sheetData: {
+      handler (n) {
+        if (n === null) return
+        if (n.length === 1) {
+          this.btnData[2].disabled = true
+        } else {
+          this.btnData[2].disabled = false
+        }
+      },
+      deep: true,
+      immediate: true
+    },
     dialog (val) {
       val || this.close()
     },
     dialogDelete (val) {
       val || this.closeDelete()
     },
+    //! 更改奖池名
+    dialog_jackportName (open) {
+      if (open) {
+        this.jackportName = this.tabName[this.currentTab]
+      } else {
+        this.tabName[this.currentTab] = this.jackportName
+      }
+    }
   },
 
-  created () {
-    // this.initialize()
+  mounted () {
+    this.sheetData = this.defaultData
   },
 
   methods: {
+    test (i) {
+      this.dialog_jackportName = true
+      console.log(i)
+    },
     //! tab表头按钮点击方法 触发传入的方法名 和当前tab页index值
     headBtnClick (methodsName, i) {
       this[methodsName](i)
@@ -211,10 +250,16 @@ export default {
     },
     // 清空当前表
     delCurrentTab (i) {
-      console.log(i)
+      if (this.tabName.length === 1)
+        return
+      this.tabName.splice(i, 1)
+      this.sheetData.splice(i, 1)
     },
-    addTab (i) {
-      console.log(i)
+    addTab () {
+      this.sheetData.push(this.defaultData[0])
+      var tabLength = this.tabName.length
+      this.tabName.push('新增奖池' + tabLength)
+      this.currentTab = tabLength
     },
     // 表格导入
     importFile (e) {
@@ -250,6 +295,7 @@ export default {
     },
     //! 数据整理
     sortData (sheetData, sheetName) {
+      // todo 这里直接覆盖导致每次导入都是覆盖不是增加
       this.$store.state.module.sheetData = sheetData
       this.tabName = this.$store.state.module.sheetName = sheetName
 
@@ -283,14 +329,12 @@ export default {
           }
         )
 
-        if (this.sheetData === 1)
+        if (this.sheetData[0].data.length === 0)
           this.sheetData = []
 
         //! 存入数据
         this.sheetData.push(
           {
-            sort: '',
-            url: '',
             headers: headers,
             data: tabData,
             columnName: columnName
@@ -299,27 +343,6 @@ export default {
       }
       console.log(this.sheetData)
     },
-
-
-
-
-
-
-
-
-    initialize () {
-      this.desserts = [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-        },
-
-      ]
-    },
-
     editItem (item) {
       this.editedIndex = this.desserts.indexOf(item)
       this.editedItem = Object.assign({}, item)
