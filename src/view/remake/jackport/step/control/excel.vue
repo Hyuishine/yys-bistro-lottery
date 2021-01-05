@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-26 12:12:05
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2021-01-05 23:12:04
+ * @LastEditTime: 2021-01-05 23:14:55
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -14,7 +14,7 @@
           center-active
           color="primary"
           light>
-
+    <!-- 更改奖池名称 tab栏名称 -->
     <v-dialog max-width="600"
               v-model="dialog_jackportName">
       <v-card>
@@ -26,11 +26,11 @@
       </v-card>
     </v-dialog>
 
-    <!-- tab栏 有多少个sheet 创多少个 -->
+    <!-- tab栏 有多少个sheet 创多少个，双击修改tab名 -->
     <v-tab dense
            v-for="(name,i) in tabName"
            :key="i"
-           @dblclick="test(i)"> {{ name }}
+           @dblclick="dialog_jackportName = true"> {{ name }}
     </v-tab>
     <!-- tab页 -->
     <v-tab-item v-for="(sheet,i) in sheetData"
@@ -235,10 +235,6 @@ export default {
   },
 
   methods: {
-    test (i) {
-      this.dialog_jackportName = true
-      console.log(i)
-    },
     //! tab表头按钮点击方法 触发传入的方法名 和当前tab页index值
     headBtnClick (methodsName, i) {
       this[methodsName](i)
