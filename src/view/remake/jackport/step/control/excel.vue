@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-26 12:12:05
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2021-01-05 23:06:43
+ * @LastEditTime: 2021-01-05 23:12:04
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -162,7 +162,7 @@ export default {
         headers: [
           { text: '奖品名称', value: '奖品名称' },
           { text: '数量', value: '数量' },
-          { text: '赞助人', value: '单个价值' },
+          { text: '赞助人', value: '赞助人' },
           { text: '单个价值', value: '单个价值' }
         ],
         data: [],
