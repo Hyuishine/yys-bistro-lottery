@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-26 12:12:05
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2021-01-05 23:14:55
+ * @LastEditTime: 2021-01-06 22:58:45
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -78,7 +78,8 @@
                                md="4"
                                v-for="(name, i) in sheet.columnName"
                                :key="i">
-                          <v-text-field v-model="editedItem.name"
+                          <!-- 当前表的 editItem -->
+                          <v-text-field v-model="sheetData[currentTab].editItem[name]"
                                         :label="name"></v-text-field>
                         </v-col>
                       </v-row>
@@ -156,7 +157,8 @@ export default {
       { label: '添加奖池', color: 'success', method: 'addTab', disabled: false },
       { label: '清空该奖池', color: 'error', method: 'delCurrentTab', disabled: false },
     ],
-    currentTab: 0,
+    currentTab: null,
+    editIndex: null,// 当前编辑的行
     defaultData: [
       {
         headers: [
@@ -166,9 +168,11 @@ export default {
           { text: '单个价值', value: '单个价值' }
         ],
         data: [],
-        columnName: ['奖品名称', '数量', '赞助人', '单个价值']
+        columnName: ['奖品名称', '数量', '赞助人', '单个价值'],
+        editItem: { '奖品名称': '', '数量': '', '赞助人': '', '单个价值': '' }
       }
     ],
+    formTitle: '新增奖品',
     jackportName: '',
     // 奖池名称修改弹出框
     dialog_jackportName: false,
@@ -176,30 +180,14 @@ export default {
     dialogDelete: false,
 
     desserts: [],
-    editedIndex: -1,
 
     editedItem: {
-      name: '',
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
+
     },
     defaultItem: {
-      name: '',
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
+
     },
   }),
-
-  computed: {
-    formTitle () {
-      return this.editedIndex === -1 ? '新增奖品' : '编辑奖品'
-    },
-  },
-
   watch: {
     // 如果是最后一个奖池 则不允许清空
     sheetData: {
@@ -303,6 +291,7 @@ export default {
         var headers = []
         var tabData = []
         var columnName = []
+        var editItem = {}
         // 表数据
         tabData = sheetData[i]
         // 列名
@@ -316,6 +305,8 @@ export default {
               value: item
             }
           )
+          // 添加以列名为key值的对象
+          editItem[item] = ''
         })
         // 增加操作列
         headers.push(
@@ -324,7 +315,7 @@ export default {
             value: 'actions',
           }
         )
-
+        // 如果第一个表都没有数据，则置空模板 再赋值
         if (this.sheetData[0].data.length === 0)
           this.sheetData = []
 
@@ -333,50 +324,59 @@ export default {
           {
             headers: headers,
             data: tabData,
-            columnName: columnName
+            columnName: columnName,
+            editItem: editItem
           }
         )
       }
       console.log(this.sheetData)
     },
     editItem (item) {
-      this.editedIndex = this.desserts.indexOf(item)
-      this.editedItem = Object.assign({}, item)
+      this.formTitle = '编辑奖品'
+      // 编辑的第几行
+      this.editIndex = this.sheetData[this.currentTab].data.indexOf(item)
+      // this.editedItem = Object.assign({}, item)
+      console.log('编辑的第' + this.editIndex)
+      console.log(this.sheetData[this.currentTab].editItem)
       this.dialog = true
     },
 
     deleteItem (item) {
-      this.editedIndex = this.desserts.indexOf(item)
+      // var editedIndex = this.desserts.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
     },
 
     deleteItemConfirm () {
-      this.desserts.splice(this.editedIndex, 1)
+      // this.desserts.splice(this.editedIndex, 1)
       this.closeDelete()
     },
 
     close () {
       this.dialog = false
+      this.editIndex = null
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
+        //! 恢复编辑弹出框的默认值
+        var obj = this.sheetData[this.currentTab].editItem
+        for (let key in obj) {
+          obj[key] = ''
+        }
+        this.sheetData[this.currentTab].editItem = obj
       })
+      this.formTitle = '新增奖品'
     },
 
     closeDelete () {
       this.dialogDelete = false
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
       })
     },
 
     save () {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem)
-      } else {
-        this.desserts.push(this.editedItem)
+      if (this.editIndex > -1) {
+        Object.assign(this.sheetData[this.currentTab].data[this.editIndex],
+          this.sheetData[this.currentTab].editItem)
       }
       this.close()
     },
