@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-26 12:12:05
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2021-01-06 23:05:03
+ * @LastEditTime: 2021-01-06 23:13:09
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -224,9 +224,9 @@ export default {
     headBtnClick (methodsName, i) {
       this[methodsName](i)
     },
-    // 导入数据
+    // 导入数据 通过调取隐藏的文件上传框的点击事件唤起文件上传
     toImportFile (i) {
-      // console.log(this.$refs.importFileDom[0].dispatchEvent)
+      this.btnData[0].disabled = true
       this.$refs.importFileDom[i].dispatchEvent(new MouseEvent('click'))
     },
     // 清空当前表
@@ -271,7 +271,8 @@ export default {
         };
         reader.readAsBinaryString(file[0]);
       } catch (error) {
-        return
+        // 放开导入按钮
+        this.btnData[0].disabled = false
       }
     },
     //! 数据整理
@@ -279,9 +280,6 @@ export default {
       // todo 这里直接覆盖导致每次导入都是覆盖不是增加
       this.$store.state.module.sheetData = sheetData
       this.tabName = this.$store.state.module.sheetName = sheetName
-
-      // console.log(sheetData)
-      // console.log(sheetName)
 
       // 每个表的信息
       for (var i = 0; i < sheetData.length; i++) {
@@ -293,7 +291,6 @@ export default {
         tabData = sheetData[i]
         // 列名
         columnName = Object.keys(tabData[i])
-        // console.log(sheetName)
         // 列名转换为表格组件可以用的格式
         columnName.forEach((item) => {
           headers.push(
@@ -326,15 +323,13 @@ export default {
           }
         )
       }
-      console.log(this.sheetData)
+      // 放开导入按钮
+      this.btnData[0].disabled = false
     },
     editItem (item) {
       this.formTitle = '编辑奖品'
       // 编辑的第几行
       this.editIndex = this.sheetData[this.currentTab].data.indexOf(item)
-      // this.editedItem = Object.assign({}, item)
-      console.log('编辑的第' + this.editIndex)
-      console.log(this.sheetData[this.currentTab].editItem)
       this.dialog = true
     },
 
