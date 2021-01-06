@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-26 12:12:05
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2021-01-06 22:58:45
+ * @LastEditTime: 2021-01-06 23:05:03
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -110,10 +110,10 @@
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1"
                            text
-                           @click="closeDelete">Cancel</v-btn>
+                           @click="dialogDelete = false">取消</v-btn>
                     <v-btn color="blue darken-1"
                            text
-                           @click="deleteItemConfirm">OK</v-btn>
+                           @click="deleteItemConfirm">确定</v-btn>
                     <v-spacer></v-spacer>
                   </v-card-actions>
                 </v-card>
@@ -204,9 +204,6 @@ export default {
     },
     dialog (val) {
       val || this.close()
-    },
-    dialogDelete (val) {
-      val || this.closeDelete()
     },
     //! 更改奖池名
     dialog_jackportName (open) {
@@ -348,13 +345,14 @@ export default {
     },
 
     deleteItemConfirm () {
-      // this.desserts.splice(this.editedIndex, 1)
-      this.closeDelete()
+      this.sheetData[this.currentTab].data.splice(this.editedIndex, 1)
+      this.dialogDelete = false
     },
 
     close () {
       this.dialog = false
       this.editIndex = null
+      this.formTitle = '新增奖品'
       this.$nextTick(() => {
         //! 恢复编辑弹出框的默认值
         var obj = this.sheetData[this.currentTab].editItem
@@ -363,18 +361,11 @@ export default {
         }
         this.sheetData[this.currentTab].editItem = obj
       })
-      this.formTitle = '新增奖品'
     },
-
-    closeDelete () {
-      this.dialogDelete = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-      })
-    },
-
     save () {
       if (this.editIndex > -1) {
+        // 将当前表的 编辑对象（以列名为key值）绑定的数据（弹出框中的输入框的值）
+        // 赋值给当前编辑的行 
         Object.assign(this.sheetData[this.currentTab].data[this.editIndex],
           this.sheetData[this.currentTab].editItem)
       }
