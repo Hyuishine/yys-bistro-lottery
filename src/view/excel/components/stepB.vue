@@ -59,6 +59,7 @@
                        class="mb-2">
                   生成缩写
                 </v-btn>
+                <!-- i为当前表 -->
                 <v-btn color="primary"
                        dark
                        @click="dataToCreate(i)"
@@ -139,6 +140,7 @@ export default {
         //   data: []
         // }
       ],
+      waitCreateData: [], // 等待生成文件的数据
       // 表格名
       sheetName: [],
     }
@@ -169,7 +171,6 @@ export default {
       var rowLength = this.sheetData[i].data.length
 
       for (let index = 0; index < rowLength; index++) {
-        // console.log(this.sheetData[i].data[index].nameSort)
         var waitFilter = makePy(
           this.sheetData[i].data[index].Name
         )
@@ -183,7 +184,7 @@ export default {
         this.sheetData[i].data[index].nameSort = this.sheetData[i].sort + waitSub
       }
     },
-
+    // 将二进制文件下载
     downloadBlobFile (content, fileName, type) {
       const blob = new Blob([content], {
         type: type
@@ -216,41 +217,41 @@ export default {
         this.alertText = '该地区已填写完成'
         this.alertStatus = true
         this.curDownload = 0
+        // 下载打包数据
+        this.creatFile(this.waitCreateData, i)
       } else {
-
+        // 生成打包数据
         var downLoadTimer = setTimeout(() => {
           // 当前表.下载到的行
-          let code = this.sheetData[i].data[this.curDownload].Code.trim()
-          let nameSort = this.sheetData[i].data[this.curDownload].nameSort.trim()
-          let name = this.sheetData[i].data[this.curDownload].Name.trim()
-          this.creatFile(i, code, name, nameSort)
-
+          this.waitCreateData.push(
+            {
+              code: this.sheetData[i].data[this.curDownload].Code.trim(),
+              nameSort: this.sheetData[i].data[this.curDownload].nameSort.trim(),
+              name: this.sheetData[i].data[this.curDownload].Name.trim()
+            }
+          )
           this.curDownload++
           this.dataToCreate(i)
-        }, 3000)
+        }, 10)
       }
     },
-    creatFile (i, code, name, nameSort) {
-      // 获取生成的代码
-      var zipFile = widthoutLicense(this.sheetData[i].url, code)
-
+    creatFile (data, i) {
       const zip = new JSZip();
-      // 生成代码
-      zip.file(
-        // 文件路径:缩写/index.html
-        // `${this.sheetName[i]}/${nameSort}/index.html`,
-        `${nameSort}/index.html`,
-        zipFile
-      );
-      // zip.file(
-      //   `${name}.txt`,
-      //   zipFile
-      // );
+
+      // 生成打包的代码
+      data.forEach((obj) => {
+        zip.file(
+          // 文件路径:缩写/index.html
+          `${obj.name + '——' + obj.nameSort + '——' + obj.code}/index.html`,
+          widthoutLicense(this.sheetData[i].url, obj.code)
+        );
+      })
+
+      // 打包生成的代码
       zip.generateAsync({ type: "blob" }).then(
         (blob) => {
           // 文件名：缩写 .zip
-          // this.downloadBlobFile(blob, `${name}--${nameSort}.zip`);
-          this.downloadBlobFile(blob, `${nameSort}.zip`);
+          this.downloadBlobFile(blob, `${this.sheetName[i]}.zip`);
         },
         (err) => {
           console.log('生成文件失败，错误信息如下')
@@ -260,6 +261,11 @@ export default {
           console.log(err)
         }
       );
+      // 下载完成后初始化数据
+      var resetTimer = setTimeout(() => {
+        this.waitCreateData = []
+        clearTimeout(resetTimer)
+      }, 3000)
     }
   }
 }
