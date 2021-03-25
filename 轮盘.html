@@ -1,0 +1,292 @@
+<!--
+ * @Author: 黄宇/hyuishine
+ * @Date: 2021-03-25 16:45:01
+ * @LastEditors: 黄宇/hyuishine
+ * @LastEditTime: 2021-03-25 16:49:49
+ * @Description: 
+ * @Email: hyuishine@gmail.com
+ * @Company: 3xData
+ * @youWant: add you want
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <title>轮盘测试</title>
+    <style>
+        .zhu {
+            position: fixed;
+            top: calc(50% - 250px);
+            left: calc(50% - 250px);
+            width: 500px;
+            height: 500px;
+            background: #cff;
+        }
+
+        .zhu .pan {
+            position: absolute;
+            top: calc(50% - 200px);
+            left: calc(50% - 200px);
+            width: 400px;
+            height: 400px;
+        }
+
+        .zhu .pan .wai {
+            width: 100%;
+            height: 100%;
+            border-radius: 100%;
+            background: #fdc081;
+        }
+
+        .zhu .pan .wai::before {
+            content: '';
+            display: block;
+            width: 86%;
+            height: 86%;
+            border-radius: 100%;
+            position: absolute;
+            top: 7%;
+            left: 7%;
+            background-color: #fff;
+        }
+
+        .zhu .pan .wai span {
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .zhu .pan .wai span::before {
+            content: '';
+            display: block;
+            width: 16px;
+            height: 16px;
+            border-radius: 100%;
+            position: absolute;
+            top: 6px;
+            left: calc(50% - 8px);
+        }
+
+        .zhu .pan .wai span:nth-child(2n)::before {
+            width: 14px;
+            height: 14px;
+        }
+
+        .zhu .pan .wai span:nth-child(4n)::before {
+            background-color: #7c83f8;
+        }
+
+        .zhu .pan .wai span:nth-child(4n-1)::before {
+            background-color: #7efffd;
+        }
+
+        .zhu .pan .wai span:nth-child(4n-2)::before {
+            background-color: #fe7d00;
+        }
+
+        .zhu .pan .wai span:nth-child(4n-3)::before {
+            background-color: #e3ff2f;
+        }
+
+
+        /* 抽奖选项 */
+        .xuanxiang {
+            width: 80%;
+            height: 80%;
+            background-color: #fff;
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            border-radius: 100%;
+            overflow: hidden;
+            transition: all 5s;
+        }
+
+        .xuanxiang::after {
+            content: '';
+            display: block;
+            width: 50%;
+            height: 50%;
+            background-color: #fff;
+            position: absolute;
+            top: 25%;
+            left: 25%;
+            border-radius: 100%;
+            overflow: hidden;
+        }
+
+        .xuanxiang span {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .xuanxiang span::before {
+            content: '';
+            display: block;
+            width: 0px;
+            border: 40px solid transparent;
+            border-top-width: 160px;
+            border-top-style: solid;
+            position: absolute;
+            left: calc(50% - 40px);
+        }
+
+        .xuanxiang span:nth-child(2n-1)::before {
+            border-top-color: #fcc;
+        }
+
+        .xuanxiang span:nth-child(2n)::before {
+            border-top-color: #ffc;
+        }
+
+        .xuanxiang span i {
+            display: block;
+            font-style: normal;
+            font-weight: bold;
+            color: #f35;
+            position: absolute;
+            left: calc(50% - 8px);
+            top: 2%;
+            width: 16px;
+            font-size: 16px;
+        }
+
+        /* 中心部位 */
+        .nei {
+            width: 34%;
+            height: 34%;
+            position: absolute;
+            top: 33%;
+            left: 33%;
+            border-radius: 100%;
+            background-color: #ffbf81;
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        .nei span {
+            display: block;
+            width: 100%;
+            padding-top: 20px;
+            color: #f35;
+            font-size: 32px;
+            text-align: center;
+            transition: .3s;
+        }
+
+        .nei:hover span {
+            color: #fff;
+            transition: .3s;
+        }
+
+        /* 选项锚 */
+        .mao {
+            width: 80%;
+            height: 80%;
+            position: absolute;
+            top: 8%;
+            left: 10%;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .mao::before {
+            content: '';
+            display: inline-block;
+            border: 10px solid transparent;
+            border-top: 18px solid #69f;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="zhu">
+        <div class="pan">
+            <div class="wai"></div>
+            <div class="mao">
+            </div>
+            <div class="xuanxiang">
+                <span><i>加个班</i></span>
+                <span><i>追新番</i></span>
+                <span><i>敲代码</i></span>
+                <span><i>谈恋爱</i></span>
+                <span><i>上优设</i></span>
+                <span><i>吃大餐</i></span>
+                <span><i>写作业</i></span>
+                <span><i>放个假</i></span>
+                <span><i>改需求</i></span>
+                <span><i>玩游戏</i></span>
+                <span><i>想算法</i></span>
+                <span><i>睡懒觉</i></span>
+            </div>
+            <div class="nei">
+                <div class="huan">
+                    <span>今天<br />做点啥</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        //外框小点
+        (function ($) {
+            var wai = $('.wai');
+            if (wai.length < 1) return;
+            var html = '';
+            for (var i = 0; i < 24; i++) {
+                html += '<span></span>';
+            }
+            wai.append(html);
+            var r = 0;
+            wai.children('span').each(function () {
+                $(this).css({
+                    transform: 'rotate(' + r + 'deg)'
+                })
+                r = r + 15;
+            });
+        })(jQuery);
+
+        //游戏项
+        (function ($) {
+            var r = 0;
+            $('.xuanxiang>span').each(function () {
+                $(this).css({
+                    transform: 'rotate(' + r + 'deg)'
+                })
+                r = r + 30;
+            })
+        })(jQuery);
+
+        //游戏
+        (function ($) {
+            var btn = $('.nei');
+            if (btn.length < 1) return;
+            var a = $('.xuanxiang');
+            if (a.length < 1) return;
+            var rotate = 0;
+            btn.on('click', function () {
+                var num = Math.floor(Math.random() * 1800 + 360);
+                rotate = rotate + num;
+                var yu = rotate % 60;
+                if (yu > 10 && yu < 30) rotate -= 20;
+                if (yu > 30 && yu < 50) rotate += 20;
+                a.css({
+                    transform: 'rotate(' + rotate + 'deg)'
+                });
+            });
+        })(jQuery);
+
+    </script>
+</body>
+
+</html>

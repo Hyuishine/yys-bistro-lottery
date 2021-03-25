@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:41:29
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-26 09:00:56
+ * @LastEditTime: 2021-03-25 17:11:50
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -29,6 +29,12 @@ const routes = [
                 path: '/index',
                 name: 'index',
                 component: resolve => require(['@/view/remake'], resolve)
+            },
+            {
+                // 轮盘测试
+                path: '/rouletteTest',
+                name: 'rouletteTest',
+                component: resolve => require(['@/view/rouletteTest/index'], resolve)
             },
         ]
     }
