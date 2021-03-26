@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2021-03-25 17:11:38
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2021-03-26 15:39:14
+ * @LastEditTime: 2021-03-26 17:22:04
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -35,34 +35,46 @@
 <template>
   <v-card class="rouletteContainer"
           color="primary">
-    <div class="weel_out">
-      <div class="weel_in"> </div>
+    <div class="wheel_out">
+      <v-btn color="primary"
+             class="btn_start"
+             x-large
+             fab
+             @click="start()">
+        开始
+      </v-btn>
     </div>
-    <span v-for="i in 360"
-          :key="i"
-          :style="'transform:rotate('+ i * (360 / items) + 'deg);--borderWdith:'+ (360 / items) * 2 +'px;'"></span>
+    <div id="wheel_container">
+      <span v-for="i in 360"
+            :key="i"
+            :style="'transform:rotate('+ i * (360 / items) + 'deg);--borderWdith:'+ (360 / items) * 2 +'px;'"></span>
+    </div>
   </v-card>
 </template>
 <script>
 export default {
-  name: 'components_randomWeel',
+  name: 'components_randomwheel',
   data () {
     return {
       // 等腰三角形数量
       items: 10,
-      // 高 底 顶角 底角
-      triangle_Height: null,
-      triangle_Bottom: null,
-      triangle_Vertex: null,
-      triangle_bottomAngle: null
     }
   },
   methods: {
+    start () {
+      document.getElementById('wheel_container')
+    },
     randomColor () {
       let r = Math.floor(Math.random() * 255);
       let g = Math.floor(Math.random() * 255);
       let b = Math.floor(Math.random() * 255);
       return 'rgba(' + r + ',' + g + ',' + b + ',0.8)'
+    }
+  },
+  mounted () {
+    let dom = document.getElementById("myId")
+    for (let i = 0; i < this.items.length; i++) {
+      window.getComputedStyle(dom[i], ":before")
     }
   }
 }
@@ -73,55 +85,69 @@ export default {
   width: 500px;
   height: 500px;
   margin: 200px auto;
-  .weel_out {
+  .wheel_out {
     z-index: 2;
-    width: 90%;
-    height: 90%;
+    width: 100%;
+    height: 100%;
     background: transparent;
-    border: 20px solid pink;
+    border: 40px solid white;
     &,
-    .weel_in {
+    .wheel_in {
       position: relative;
       border-radius: 50% !important;
       transform: translate(-50%, -50%);
       top: 50%;
       left: 50%;
     }
-    .weel_in {
+    .wheel_in {
       width: 30%;
       height: 30%;
-      // background: pink;
+      background: white;
     }
   }
 }
-span {
-  position: absolute;
-  border-radius: 50% !important;
-  top: 5%;
-  left: 5%;
-  z-index: 1;
-  width: 90%;
-  height: 90%;
-  background: transparent;
-}
-span::before {
-  content: "";
-  display: block;
-  width: 0px;
-  //! 乘以2 是底边长
-  border: var(--borderWdith) solid transparent;
-  //! 三角形高
-  border-top-width: 225px;
-  border-top-style: solid;
-  position: absolute;
-  background: transparent;
-  left: calc(50% - var(--borderWdith));
-}
 
-span:nth-child(2n-1)::before {
-  border-top-color: red;
+#wheel_container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  span {
+    position: absolute;
+    border-radius: 50% !important;
+    top: 5%;
+    left: 5%;
+    z-index: 1;
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    overflow: hidden;
+    background: transparent;
+    &::before {
+      content: "";
+      display: block;
+      width: 0px;
+      //! 乘以2 是底边长
+      border: var(--borderWdith) solid transparent;
+      //! 三角形高
+      border-top-width: 225px;
+      border-top-style: solid;
+      position: absolute;
+      background: transparent;
+      left: calc(50% - var(--borderWdith));
+    }
+    &:nth-child(2n-1)::before {
+      border-top-color: red;
+    }
+    &:nth-child(2n)::before {
+      border-top-color: black;
+    }
+  }
 }
-span:nth-child(2n)::before {
-  border-top-color: black;
+.btn_start {
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
 }
 </style>
