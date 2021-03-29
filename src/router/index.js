@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:41:29
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2021-03-25 17:11:50
+ * @LastEditTime: 2021-03-29 09:26:15
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -39,5 +39,5 @@ const routes = [
         ]
     }
 ]
-const router = new Router({ routes })
+const router = new Router({ mode: 'history', routes })
 export default router
