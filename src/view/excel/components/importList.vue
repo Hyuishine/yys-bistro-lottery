@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-21 19:17:53
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-26 17:54:48
+ * @LastEditTime: 2020-12-27 16:21:05
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -54,13 +54,19 @@ export default {
           self.$store.state.module.sheetData = sheetData
           self.$store.state.module.sheetName = sheetName
 
-          console.log(sheetName)
-          console.log(sheetData)
+          // console.log(sheetName)
+          // console.log(sheetData)
         };
         reader.readAsBinaryString(file[0]);
       } catch (error) {
-        return
+        console.log('导入excel名单时出错，报错信息如下')
+        console.log(error)
       }
+      // 上发导入完成事件，让步骤条跳到第二步抽奖
+      var timer = setTimeout(() => {
+        this.$emit('exportComplete')
+        clearTimeout(timer)
+      }, 1000)
     },
   }
 }
