@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-25 00:08:29
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-27 16:09:29
+ * @LastEditTime: 2021-03-29 16:13:35
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -12,6 +12,7 @@
   <div class="random_card_container">
     <v-card class="random_card_area"
             v-if="list.length > 0">
+      <!-- 奖池，高亮显示当前被滚动到的人 -->
       <v-card v-for="(name,index) in list"
               :key="index"
               :style="currentIndex === index ?  'background-color:red;color:white;':''"
@@ -75,7 +76,7 @@ export default {
       // 开始 结束 加速 减速 定时器
       timer_start: null,
       timer_stop: null,
-      // !测试数据
+      // 当前中奖编号
       currentIndex: 0
     }
   },
@@ -93,7 +94,6 @@ export default {
   methods: {
     shuffle: function () {
       this.list = _.shuffle(this.list)
-      // console.log(this.list)
     },
     toogleRandom () {
       if (!this.randomStatus) {
