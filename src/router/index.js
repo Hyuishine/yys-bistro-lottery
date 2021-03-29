@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:41:29
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2021-03-29 09:26:15
+ * @LastEditTime: 2021-03-29 14:41:49
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -32,9 +32,9 @@ const routes = [
             },
             {
                 // 轮盘测试
-                path: '/rouletteTest',
-                name: 'rouletteTest',
-                component: resolve => require(['@/view/rouletteTest/index'], resolve)
+                path: '/wheelRandom',
+                name: 'wheelRandom',
+                component: resolve => require(['@/view/wheelRandom/index'], resolve)
             },
         ]
     }
