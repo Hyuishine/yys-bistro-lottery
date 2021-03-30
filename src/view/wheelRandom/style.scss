@@ -21,15 +21,18 @@
     // 指针
     &::before {
       content: "";
-      margin: 0px calc(50% - 15px);
+      transform: translate(-50%,-50%);
+      /* margin: 0px calc(50% - 15px); */
       display: block;
       width: 0px;
       border: 15px solid transparent;
-      border-top-style: solid;
-      border-top-width: 40px;
+      border-bottom-style: solid;
+      border-bottom-width: 40px;
       position: absolute;
       background: transparent;
-      border-top-color: white;
+      border-bottom-color: yellow;
+      top: 36%;
+      left: 50%;
     }
   }
 }
