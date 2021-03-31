@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:41:29
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2021-03-29 16:03:53
+ * @LastEditTime: 2021-03-31 11:13:27
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -36,6 +36,12 @@ const routes = [
                 name: 'wheelRandom',
                 component: resolve => require(['@/view/wheelRandom/index'], resolve)
             },
+            {
+                // 老虎机
+                path: '/slotMachine',
+                name: 'slotMachine',
+                component: resolve => require(['@/view/slotMachine/index'], resolve)
+            }
         ]
     }
 ]
