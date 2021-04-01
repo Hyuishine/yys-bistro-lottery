@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2021-03-31 11:13:37
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2021-04-01 14:47:54
+ * @LastEditTime: 2021-04-01 16:03:48
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -10,24 +10,26 @@
 -->
 <template>
   <!-- 奖池容器，转动时 转动这个容器即可 -->
-  <div class="jackport_container"
-       :style="'transform:rotateX('+ currentDeg + 'deg);'">
-    <!-- 奖池，通过旋转形成滚筒 -->
-    <div class="award"
-         v-for="(name, index) in jackport"
-         :key="index"
-         :style="`transform: rotateX(${(awardRotate) * index}deg) translateZ(${awardTranslateZ}px)`">
-      {{ name }}
+  <div class="random_slotMachine">
+    <div class="jackport_container"
+         :style="'transform:rotateX('+ currentDeg + 'deg);'">
+      <!-- 奖池，通过旋转形成滚筒 -->
+      <div class="award"
+           v-for="(name, i) in jackport"
+           :key="i"
+           :style="`transform: rotateX(${(awardRotate) * i}deg) translateZ(${awardTranslateZ}px)`">
+        {{ name }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'slotMachine',
+  name: 'random_slotMachine',
   data () {
     return {
-      jackport: Array.from(new Array(15), (val, index) => { return index }),
+      jackport: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       currentDeg: 0,
     }
   },
@@ -44,27 +46,49 @@ export default {
 </script>
 
 <style lang="scss">
-.jackport_container {
-  * {
-    box-sizing: border-box;
-  }
-  perspective: 999999px;
-  user-select: none;
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin-right: 200px;
-  transform-style: preserve-3d;
-  .award {
+.random_slotMachine {
+  width: 100%;
+  height: 600px;
+  overflow: hidden;
+  padding: 200px 0;
+  // 上下两端 渐变 模拟立体
+  &::before,
+  &::after {
+    content: "";
     position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 100%;
-    height: 200px;
-    border: 1px solid #333;
-    background-color: #fff;
-    font-size: 150px;
+    height: 80px;
+    z-index: 1;
+  }
+  &::before {
+    top: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1));
+  }
+  &::after {
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 0.1)
+    );
+  }
+  .jackport_container {
+    transform-style: preserve-3d;
+
+    * {
+      box-sizing: border-box;
+    }
+    .award {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 200px;
+      border: 1px solid #333;
+      background-color: #fff;
+      font-size: 150px;
+    }
   }
 }
 </style>
