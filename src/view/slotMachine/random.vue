@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2021-03-31 11:13:37
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2021-04-01 16:03:48
+ * @LastEditTime: 2021-04-15 21:23:00
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -29,7 +29,7 @@ export default {
   name: 'random_slotMachine',
   data () {
     return {
-      jackport: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      jackport: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
       currentDeg: 0,
     }
   },
@@ -50,7 +50,9 @@ export default {
   width: 100%;
   height: 600px;
   overflow: hidden;
+  perspective: 999999px;
   padding: 200px 0;
+  position: relative;
   // 上下两端 渐变 模拟立体
   &::before,
   &::after {
@@ -74,7 +76,12 @@ export default {
   }
   .jackport_container {
     transform-style: preserve-3d;
-
+    perspective: 999999px;
+    user-select: none;
+    position: relative;
+    display: box;
+    align-items: center;
+    justify-content: center;
     * {
       box-sizing: border-box;
     }
