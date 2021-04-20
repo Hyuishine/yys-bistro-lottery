@@ -14,10 +14,11 @@
   </div>
 </template>
 <style lang="scss">
-html,
+html {
+  overflow: auto;
+}
 body {
   margin: 0;
-  padding: 0 0 0 12px;
-  overflow: auto;
+  padding: 0;
 }
 </style>
