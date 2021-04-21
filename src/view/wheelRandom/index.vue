@@ -1,13 +1,14 @@
 <template>
   <v-sheet>
     <weel-random style="margin:100px auto; opacity: .1;"
-                 :options="btnData"></weel-random>
+                 :options="btnData"
+                 @scrolling_status="scrolling_status"></weel-random>
     <v-row class="btn_container"
            type="flex"
            align="center"
            justify="center">
       <!-- 下方操作按钮 传入方法名、文本显示逻辑：有描述(desc)时显示desc,否则判断状态显示 -->
-      <v-btn>选择数据</v-btn>
+      <v-btn :loading="btn_loading">选择数据</v-btn>
       <v-btn v-for="(btn, i) in btnData"
              :loading="btn_loading"
              @click="btn_handler(i)"
@@ -26,7 +27,7 @@ export default {
       btn_loading: false,
       btnData: [
         { name: 'mod', desc_true: '随机旋转', desc_false: '手动停止', status: false },
-        { name: 'direction', desc_true: '正时针旋转', desc_false: '逆时针旋转', status: true },
+        { name: 'direction', desc_true: '顺时针旋转', desc_false: '逆时针旋转', status: true },
         { name: 'reCircle', desc_true: '开启回弹', desc_false: '关闭回弹', status: false },
       ],
 
@@ -43,6 +44,10 @@ export default {
         this.btn_loading = false
       }, 500)
     },
+    // 接收轮盘回传的滚动状态，来控制按钮是否启用
+    scrolling_status (status) {
+      this.btn_loading = status
+    }
   }
 }
 </script>

@@ -111,16 +111,13 @@ export default {
       if (!this.scroll_status) {
         //! 开始
         this.start()
-        this.scroll_status = true
       } else {
         //! 停止
+        this.stop()
         // document.getElementById('jackport_container').style.transitionDuration = this.scroll_stop_time / 1000 + 's'
         // this.scroll_stop_stoping = true
 
-        // 停止增加滚动格数
-        clearTimeout(this.timer_start)
-        this.timer_start = null
-        this.scroll_status = false
+
 
         // 关闭停止动画 重置状态
         // this.timer_stop = setTimeout(() => {
@@ -132,10 +129,47 @@ export default {
     },
     // 开始转动
     start () {
+      this.scroll_status = true
+      // var scrollMethod
+      // switch (this.wheelOptions.direction) {
+      //   case true: {
+      //     scrollMethod = 'this.scroll_Nums++'
+      //     break
+      //   }
+      //   case false: {
+      //     scrollMethod = 'this.scroll_Nums--'
+      //     break
+      //   }
+      //   default: {
+      //     scrollMethod = () => {
+      //       this.scroll_Nums++
+      //     }
+      //   }
+      // }
+      // 上发滚动状态，关闭按钮功能
+      this.$emit('scrolling_status', true)
       this.timer_start = setInterval(() => {
-        this.scroll_Nums++
+        eval('this.scroll_Nums--')
+        // console.log(eval(scrollMethod))
       }, 50)
+
+      // this.wheelOptions.direction ?
+      //   this.timer_start = setInterval(() => {
+      //     this.scroll_Nums++
+      //   }, 50)
+      //   : this.timer_start = setInterval(() => {
+      //     this.scroll_Nums--
+      //   }, 50)
+
     },
+    stop () {
+      // 停止增加滚动格数
+      clearTimeout(this.timer_start)
+      this.timer_start = null
+      this.scroll_status = false
+      // 上发滚动状态，开启按钮功能
+      this.$emit('scrolling_status', false)
+    }
   },
   computed: {
     // 当前选中
@@ -153,7 +187,7 @@ export default {
         temp = this.items.length - (this.scroll_Nums % this.items.length)
       } else if (this.scroll_Nums < 0) {
         // 逆时针旋转，逆时针下1后面是2，是正数组，且转动一格 加一个index逻辑上正确
-        temp = this.scroll_Nums * -1
+        temp = (this.scroll_Nums * -1) % this.items.length
       }
       return this.items[temp]
     }
