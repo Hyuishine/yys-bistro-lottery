@@ -30,12 +30,13 @@
 
     .jackport_container {
         transform-style: preserve-3d;
-        perspective: 999999px;
+        perspective: 999999999px;
         user-select: none;
         position: relative;
         display: box;
         align-items: center;
         justify-content: center;
+        transition: all 1s;
 
         * {
             box-sizing: border-box;

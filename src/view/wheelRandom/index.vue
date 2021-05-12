@@ -30,7 +30,6 @@ export default {
         { name: 'direction', desc_true: '顺时针旋转', desc_false: '逆时针旋转', status: true },
         { name: 'reCircle', desc_true: '开启回弹', desc_false: '关闭回弹', status: false },
       ],
-
     }
   },
   methods: {
