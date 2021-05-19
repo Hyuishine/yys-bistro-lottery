@@ -63,20 +63,6 @@
 import _ from 'lodash'
 export default {
   name: 'components_randomwheel',
-  props: {
-    // 转盘参数
-    options: {
-      type: Array,
-      default: () => {
-        return [
-          // 随机方式：随机停止/手动停止；旋转方向：正/逆 时针；是否开启回弹
-          // { name: 'mod', status: false },
-          // { name: 'direction', status: true },
-          // { name: 'reCircle', status: false },
-        ]
-      }
-    }
-  },
   data () {
     return {
       // 滚动单位数 是否开始滚动了
@@ -92,14 +78,7 @@ export default {
       timer_start: null,
 
       // 等腰三角形数量/转动数据
-      items: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'],
-      // 轮盘参数 
-      // 随机方式：随机停止/手动停止；旋转方向：正/逆 时针；是否开启回弹
-      wheelOptions: {
-        mod: false,
-        direction: true,
-        reCircle: false
-      }
+      items: ['辣椒炒肉', '酸菜鱼', '煲仔饭', '蛋炒饭', '兰州拉面', '河南烩面', '肉丝蛋炒粉', '麻辣香锅', '木桶饭'],
     }
   },
   methods: {
@@ -114,53 +93,16 @@ export default {
       } else {
         //! 停止
         this.stop()
-        // document.getElementById('jackport_container').style.transitionDuration = this.scroll_stop_time / 1000 + 's'
-        // this.scroll_stop_stoping = true
-
-
-
-        // 关闭停止动画 重置状态
-        // this.timer_stop = setTimeout(() => {
-        //   this.scroll_status = false
-        //   this.scroll_stop_stoping = false
-        //   clearTimeout(this.timer_stop)
-        // }, this.scroll_stop_time)
       }
     },
     // 开始转动
     start () {
       this.scroll_status = true
-      // var scrollMethod
-      // switch (this.wheelOptions.direction) {
-      //   case true: {
-      //     scrollMethod = 'this.scroll_Nums++'
-      //     break
-      //   }
-      //   case false: {
-      //     scrollMethod = 'this.scroll_Nums--'
-      //     break
-      //   }
-      //   default: {
-      //     scrollMethod = () => {
-      //       this.scroll_Nums++
-      //     }
-      //   }
-      // }
       // 上发滚动状态，关闭按钮功能
       this.$emit('scrolling_status', true)
       this.timer_start = setInterval(() => {
-        eval('this.scroll_Nums--')
-        // console.log(eval(scrollMethod))
+        this.scroll_Nums--
       }, 50)
-
-      // this.wheelOptions.direction ?
-      //   this.timer_start = setInterval(() => {
-      //     this.scroll_Nums++
-      //   }, 50)
-      //   : this.timer_start = setInterval(() => {
-      //     this.scroll_Nums--
-      //   }, 50)
-
     },
     stop () {
       // 停止增加滚动格数
@@ -192,31 +134,6 @@ export default {
       return this.items[temp]
     }
   },
-  watch: {
-    // 将收到的轮盘参数存放
-    options: {
-      handler (n) {
-        if (n) {
-          n.forEach((data) => {
-            this.wheelOptions[data.name] = data.status
-          });
-        }
-      },
-      deep: true,
-      immediate: true
-    }
-    // scroll_stop_stoping: {
-    //   handler (n) {
-    //     if (n) {
-    //       document.getElementById('jackport_container').style.transitionDuration = this.scroll_stop_time / 1000 + 's'
-    //     } else {
-    //       document.getElementById('jackport_container').style.transitionDuration = ''
-    //     }
-    //   },
-    //   deep: true,
-    //   immediate: true
-    // }
-  }
 }
 </script>
 <style lang="scss" scoped>
