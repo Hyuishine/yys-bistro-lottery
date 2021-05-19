@@ -19,7 +19,8 @@
         <!-- 当选择了完全随机，禁用其他 -->
         <v-checkbox v-model="checkBox.status"
                     :disabled="checkBox_status(i)"
-                    :label="`当前状态: ${checkBox.status ? checkBox.openTxt : checkBox.closedTxt}`"></v-checkbox>
+                    :label="`当前状态: ${checkBox.status ? checkBox.openTxt : checkBox.closedTxt}`">
+        </v-checkbox>
       </v-col>
     </v-row>
     <!-- 开始按钮 -->
@@ -30,7 +31,9 @@
                x-large
                :disabled="btn_start_status"
                @click="btn_start_status = true"
-               color="primary">{{ btn_start_status ? '正在随机抽取，将在0~30秒内停止并放开按钮。':'开始!' }}</v-btn>
+               color="primary">
+          {{ btn_start_status ? '正在随机抽取，将在0~30秒内停止并放开按钮。':'开始!' }}
+        </v-btn>
       </v-col>
     </v-row>
   </div>
