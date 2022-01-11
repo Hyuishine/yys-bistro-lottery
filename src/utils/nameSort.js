@@ -1,8 +1,8 @@
 /*
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-09 20:57:36
- * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2022-01-09 20:58:42
+ * @LastEditors: 黄宇/Hyuishine
+ * @LastEditTime: 2022-01-11 23:29:49
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -12,21 +12,35 @@
 // 参数,中文字符串
 // 返回值:拼音首字母串数组
 export function makePy (str) {
-    if (typeof (str) !== 'string') {
-        throw new Error(-1, '\u51fd\u6570makePy\u9700\u8981\u5b57\u7b26\u4e32\u7c7b\u578b\u53c2\u6570!')
+    if (str) {
+
+        if (typeof (str) !== 'string') {
+            throw new Error(-1, '\u51fd\u6570makePy\u9700\u8981\u5b57\u7b26\u4e32\u7c7b\u578b\u53c2\u6570!')
+        }
+        var arrResult = new Array() // 保存中间结果的数组
+        for (var i = 0, len = str.length; i < len; i++) {
+            // 获得unicode码
+            var ch = str.charAt(i)
+            // 检查该unicode码是否在处理范围之内,在则返回该码对映汉字的拼音首字母,不在则调用其它函数处理
+            arrResult.push(checkCh(ch))
+        }
+        // 处理arrResult,返回所有可能的拼音首字母串数组
+        var Code = mkRslt(arrResult)
+        Code = Code[0].toLowerCase()
+        mkRslt(arrResult)
+        return Code.slice(0, 6)
+    } else {
+        return randomString()
     }
-    var arrResult = new Array() // 保存中间结果的数组
-    for (var i = 0, len = str.length; i < len; i++) {
-        // 获得unicode码
-        var ch = str.charAt(i)
-        // 检查该unicode码是否在处理范围之内,在则返回该码对映汉字的拼音首字母,不在则调用其它函数处理
-        arrResult.push(checkCh(ch))
-    }
-    // 处理arrResult,返回所有可能的拼音首字母串数组
-    var Code = mkRslt(arrResult)
-    Code = Code[0].toLowerCase()
-    mkRslt(arrResult)
-    return Code
+}
+
+// 生成6位数的随机字符串
+function randomString () {
+    let str = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678"
+    let randomLen = 6
+    let result = ''
+    for (let i = 0; i < randomLen; i++) result += str.charAt(Math.floor(Math.random() * str.length));
+    return result
 }
 
 function checkCh (ch) {
