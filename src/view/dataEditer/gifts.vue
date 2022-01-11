@@ -1,8 +1,8 @@
 <!--
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 18:11:30
- * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2022-01-09 23:23:08
+ * @LastEditors: 黄宇/Hyuishine
+ * @LastEditTime: 2022-01-11 22:35:29
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -178,7 +178,7 @@ export default {
       return this.editedIndex === -1 ? '新增' : '编辑'
     },
     listData () {  // 列表数据
-      return this.$store.state.using.gifts || []
+      return this.$store.state.module.using.gifts
     }
   },
 

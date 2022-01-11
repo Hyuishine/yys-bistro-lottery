@@ -1,8 +1,8 @@
 <!--
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-09 14:28:13
- * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2022-01-09 23:10:13
+ * @LastEditors: 黄宇/Hyuishine
+ * @LastEditTime: 2022-01-11 23:38:49
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -37,7 +37,7 @@
 </template>
 <script>
 import XLSX from 'xlsx';
-import { makePy } from '@/utils/nameSort.js'
+import { idCreator } from '@/utils/idCreator.js'
 /*
 FileReader共有4种读取方法：
 1.readAsArrayBuffer(file)：将文件读取为ArrayBuffer。
@@ -91,11 +91,11 @@ export default {
       }
     },
 
-    // 处理 初始化数据
+    // 处理 初始化数据 数据需要与data中一致
     solveInit (sheetData) {
 
       try {
-        // 数据详情见：@\view\dataEditer\data\module.js
+        // 数据详情见：@\view\data\data.js
         let initData = []
 
         // 初始化数据 只有一张表
@@ -111,7 +111,7 @@ export default {
                 giftName: row['赞助奖品名称'] || '',
                 giftAmount: row['赞助数量'] || '',
                 giftRemark: row['奖品备注/详情'] || '',
-                peopleID: this.createPeopleID(row, i),
+                peopleID: idCreator(row, i),
               }
             )
           }
@@ -127,9 +127,9 @@ export default {
       }
     },
 
-    // 初始化数据
+    //! 初始化数据，数据需要与data中一致
     initializeData (sheetData) {
-      // 数据详情见：@\view\dataEditer\data\module.js
+      // 数据详情见：@\view\data\data.js
       let using = {
         peoples: [],
         gifts: [],
@@ -163,23 +163,14 @@ export default {
           )
         }
       })
-
-      this.$store.state.using = using
+      this.$store.state.module.using = using
     },
 
     // 处理备份恢复数据
     solveBackup (sheetData) {
 
-      console.log(sheetData)
-    },
 
-    // 创建人员ID 格式：称呼首字母缩写 + _con:联系方式缩写 + &表格行序号
-    createPeopleID (row, index) {
-      if (row['联系方式']) {
-        return makePy(row['人员称呼']) + '_con:' + makePy(row['联系方式']) + '&' + index
-      } else {
-        return makePy(row['人员称呼']) + '&' + index
-      }
+      console.log(sheetData)
     }
   }
 }
