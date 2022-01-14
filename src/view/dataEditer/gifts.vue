@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 18:11:30
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-11 22:35:29
+ * @LastEditTime: 2022-01-14 20:32:08
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -12,7 +12,7 @@
   <v-data-table :headers="headers"
                 :items="listData"
                 no-results-text="没有搜索到，是否需要新增？"
-                no-data-text="没有数据，请导入或新增。"
+                no-data-text="没有数据，请在人员处导入或新增。"
                 :footer-props="{
                     'items-per-page-text':'每页多少行',
                     'items-per-page-all-text':'所有'
@@ -31,43 +31,51 @@
 
         <v-spacer></v-spacer>
 
-        <!-- 新增/修改弹窗 -->
+        <!-- 修改弹窗 -->
         <v-dialog v-model="dialog"
                   max-width="500px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary"
-                   dark
-                   v-bind="attrs"
-                   v-on="on">
-              新增
-            </v-btn>
-          </template>
 
           <v-card>
-            <!-- 新增/修改  弹窗标题 -->
+            <!-- 修改  弹窗标题 -->
             <v-card-title>
-              <span class="text-h5">{{ formTitle }}</span>
+              <span class="text-h5">编辑</span>
             </v-card-title>
 
-            <!-- 新增/修改 表单项 ,当列项数据 headers 中的formItem值为flase 时不创建-->
+            <!-- 修改 表单项 ,当列项数据 headers 中的formItem值为flase 时不创建-->
             <v-card-text>
               <v-container>
-                <v-row>
-                  <template v-for="(item,i) in headers">
-                    <v-col cols="12"
-                           sm="6"
-                           md="4"
-                           :key="i"
-                           v-if="item.formItem !== false">
-                      <v-text-field v-model="editedItem[item.value]"
-                                    :label="item.text"></v-text-field>
+
+                <v-form ref="giftForm"
+                        lazy-validation>
+                  <v-row>
+                    <v-col cols="6">
+                      <v-text-field v-model="editFormObject.giftName"
+                                    label="赞助奖品名称"
+                                    :counter="20"
+                                    required
+                                    :rules="formRule.giftName"></v-text-field>
                     </v-col>
-                  </template>
-                </v-row>
+
+                    <v-col cols="6">
+                      <v-text-field v-model.number="editFormObject.giftAmount"
+                                    label="赞助数量"
+                                    required
+                                    :rules="formRule.giftAmount"></v-text-field>
+                    </v-col>
+
+                    <v-col cols="12">
+                      <v-textarea v-model="editFormObject.giftRemark"
+                                  auto-grow
+                                  label="奖品备注/详情"
+                                  rows="1" />
+                    </v-col>
+                  </v-row>
+                </v-form>
+
               </v-container>
             </v-card-text>
 
-            <!-- 新增/修改弹窗 操作按钮 -->
+            <!-- 修改弹窗 操作按钮 -->
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="primary"
@@ -123,19 +131,13 @@
       </v-icon>
     </template>
 
-    <!-- 暂无数据 -->
-    <template v-slot:no-data>
-      <v-btn color="primary">
-        导入数据
-      </v-btn>
-    </template>
   </v-data-table>
 </template>
 <script>
 export default {
   data: () => ({
     search: '', // 搜索条件
-    dialog: false, // 新增/修改 弹窗是否显示状态
+    dialog: false, // 修改 弹窗是否显示状态
     dialogDelete: false, // 删除弹窗的状态
     expanded: [], // 展开的详情
     headers: [ //! 表格 列头数据 及表单项数据
@@ -145,38 +147,33 @@ export default {
         vlaue:绑定的值，需要与表单绑定的 键对应
         sortable:允许排序？
         filterable:允许被搜索？
-        formItem:允许被编辑新增？
+        // formItem:允许被编辑新增？
       */
-      { text: '赞助奖品名称', value: 'giftName' },
-      { text: '赞助人称呼', align: 'start', value: 'name', },
+      { text: '赞助奖品名称', align: 'start', value: 'giftName' },
+      { text: '赞助人称呼', value: 'name', },
+      { text: '赞助人联系方式', value: 'howContact', },
       { text: '赞助数量', value: 'giftAmount' },
       { text: '剩余数量', value: 'remaining' },
       { text: '备注/详情', value: 'giftRemark' },
-      { text: '赞助人id', value: 'peopleID', sortable: false, formItem: false },
-      { text: '操作', value: 'actions', sortable: false, formItem: false },
+      { text: '赞助人id', value: 'peopleID', sortable: false },
+      { text: '操作', value: 'actions', sortable: false },
     ],
+    formRule: {
+      giftName: [v => !!v || '赞助奖品名称必填'],
+      giftAmount: [v => !!v && typeof v === 'number' && v > 1 || '赞助数量必须大于或等于1'],
+    },
     editedIndex: -1, // 当前编辑的行
-    editedItem: { // 编辑 表单的绑定项
+    editFormObject: { // 编辑 表单的绑定项
       name: '',
       howContact: '',
       giftAmount: 1,
       remaining: 1,
       giftName: '',
       giftRemark: '',
-    },
-    defaultItem: { // 新增时的 默认值
-      name: '',
-      giftAmount: 1,
-      howContact: '',
-      remaining: 1,
-      giftName: '',
-    },
+    }
   }),
 
   computed: {
-    formTitle () { // 新增/编辑 弹窗的标题
-      return this.editedIndex === -1 ? '新增' : '编辑'
-    },
     listData () {  // 列表数据
       return this.$store.state.module.using.gifts
     }
@@ -201,7 +198,7 @@ export default {
     */
     editItem (row) {
       this.editedIndex = this.listData.indexOf(row)
-      this.editedItem = Object.assign({}, row)
+      this.editFormObject = Object.assign({}, row)
       this.dialog = true
     },
 
@@ -209,7 +206,6 @@ export default {
     close () {
       this.dialog = false
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       })
     },
@@ -217,12 +213,13 @@ export default {
     // 删除
     deleteItem (row) {
       this.editedIndex = this.listData.indexOf(row)
-      this.editedItem = Object.assign({}, row)
+      this.editFormObject = Object.assign({}, row)
       this.dialogDelete = true
     },
 
     // 确定删除，将当前编辑的行index给删掉
     deleteItemConfirm () {
+      this.syncEdit()
       this.listData.splice(this.editedIndex, 1)
       this.closeDelete()
     },
@@ -231,22 +228,62 @@ export default {
     closeDelete () {
       this.dialogDelete = false
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       })
     },
 
-    // 新增/编辑   保存，如果有正在编辑的index，则是编辑，否则是新增
+    // 编辑   保存
     save () {
-      if (this.editedIndex > -1) {
-        Object.assign(this.listData[this.editedIndex], this.editedItem)
-      } else {
-
-        // todo 需要处理人员id，奖品id
-        this.listData.push(this.editedItem)
+      if (this.$refs.giftForm.validate()) {
+        Object.assign(this.listData[this.editedIndex], this.editFormObject)
+        this.syncEdit(this.close())
       }
-      this.close()
     },
+
+    // 同步修改人员信息
+    syncEdit (callBack) {
+      // 人员id，人员信息，该奖品在奖池中对应的人员信息的序列号
+      const peopleID = this.editFormObject.peopleID || this.listData[this.editedIndex].peopleID
+
+      let peopleInfo = this.$store.state.module.using.peoples
+
+      const peopleIndex = peopleInfo.findIndex((people) => {
+        return people.peopleID === peopleID
+      })
+
+
+      switch (true) {
+
+        // 如果有奖品名称，则修改
+        case !!this.editFormObject.giftName: {
+          peopleInfo[peopleIndex].giftName = this.editFormObject.giftName // 奖品名称
+          peopleInfo[peopleIndex].giftAmount = this.editFormObject.giftAmount // 赞助数量
+          peopleInfo[peopleIndex].giftRemark = this.editFormObject.giftRemark // 奖品备注
+
+          break
+        }
+
+        // 如果没有奖品名称 则删除
+        case !this.editFormObject.giftName: {
+          peopleInfo[peopleIndex].giftName = '' // 奖品名称
+          peopleInfo[peopleIndex].giftAmount = '' // 赞助数量
+          peopleInfo[peopleIndex].giftRemark = '' // 奖品备注
+
+          break
+        }
+
+        // 如果点了 操作列上的删除
+        case this.dialogDelete: {
+          peopleInfo[peopleIndex].giftName = '' // 奖品名称
+          peopleInfo[peopleIndex].giftAmount = '' // 赞助数量
+          peopleInfo[peopleIndex].giftRemark = '' // 奖品备注
+
+          break
+        }
+      }
+
+      callBack && callBack()
+    }
   }
 }
 </script>
