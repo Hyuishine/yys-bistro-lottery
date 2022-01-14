@@ -1,8 +1,8 @@
 <!--
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 14:36:24
- * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2022-01-09 22:10:31
+ * @LastEditors: 黄宇/Hyuishine
+ * @LastEditTime: 2022-01-14 22:43:23
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -11,6 +11,67 @@
 <template>
   <div id="sideBar_settings"
        :class="{statusFold:status}">
+
+    <v-card>
+      <v-toolbar flat
+                 color="primary"
+                 dark>
+        <v-toolbar-title>抽奖设置</v-toolbar-title>
+      </v-toolbar>
+      <v-tabs vertical>
+        <!-- tab页签 -->
+        <v-tab v-for="(tab,i) in tabContent"
+               :key="i">
+          <v-icon left>{{ tab.icon }}</v-icon>
+          {{ tab.name }}
+        </v-tab>
+        <v-tab-item>
+          <v-card flat>
+            <v-card-text>
+              <normal-settings></normal-settings>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item>
+          <v-card flat>
+            <v-card-text>
+              <p>
+                Morbi nec metus. Suspendisse faucibus, nunc et pellentesque egestas, lacus ante convallis tellus, vitae iaculis lacus elit id tortor. Sed mollis, eros et ultrices tempus, mauris ipsum aliquam libero, non adipiscing dolor urna a orci. Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Nunc sed turpis.
+              </p>
+
+              <p>
+                Suspendisse feugiat. Suspendisse faucibus, nunc et pellentesque egestas, lacus ante convallis tellus, vitae iaculis lacus elit id tortor. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. In hac habitasse platea dictumst. Fusce ac felis sit amet ligula pharetra condimentum.
+              </p>
+
+              <p>
+                Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida magna mi a libero. Nam commodo suscipit quam. In consectetuer turpis ut velit. Sed cursus turpis vitae tortor. Aliquam eu nunc.
+              </p>
+
+              <p>
+                Etiam ut purus mattis mauris sodales aliquam. Ut varius tincidunt libero. Aenean viverra rhoncus pede. Duis leo. Fusce fermentum odio nec arcu.
+              </p>
+
+              <p class="mb-0">
+                Donec venenatis vulputate lorem. Aenean viverra rhoncus pede. In dui magna, posuere eget, vestibulum et, tempor auctor, justo. Fusce commodo aliquam arcu. Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec, nisi.
+              </p>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item>
+          <v-card flat>
+            <v-card-text>
+              <p>
+                Fusce a quam. Phasellus nec sem in justo pellentesque facilisis. Nam eget dui. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. In dui magna, posuere eget, vestibulum et, tempor auctor, justo.
+              </p>
+
+              <p class="mb-0">
+                Cras sagittis. Phasellus nec sem in justo pellentesque facilisis. Proin sapien ipsum, porta a, auctor quis, euismod ut, mi. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nam at tortor in tellus interdum sagittis.
+              </p>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+      </v-tabs>
+    </v-card>
 
     <v-card class="content">
 
@@ -24,10 +85,20 @@
   </div>
 </template>
 <script>
+import normalSettings from './leftModule/normal.vue'
+
+
 export default {
   name: 'sideBar_settings',
+  components: { normalSettings },
+
   data: () => ({
-    status: true, // 是否显示
+    status: true, // 是否显示 
+    tabContent: [ // tab页签
+      { name: '常规设置', icon: 'mdi-cog-outline' },
+      { name: '抽奖资格设置', icon: 'mdi-emoticon-kiss-outline' },
+      { name: '奖池设置', icon: 'mdi-gift-open-outline' },
+    ]
   })
 }
 </script>
