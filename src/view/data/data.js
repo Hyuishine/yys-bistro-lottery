@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-09 14:28:22
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-09 23:38:59
+ * @LastEditTime: 2022-01-14 20:27:25
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -60,6 +60,7 @@ export default {
             gifts: [
                 // {
                 //     name: '赞助人称呼',
+                //     howContact: '赞助人联系方式',
                 //     giftName: '赞助奖品名称',
                 //     giftAmount: '提供数量',
                 //     remaining: '剩余数量',
