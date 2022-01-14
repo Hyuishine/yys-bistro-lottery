@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 18:11:30
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-11 22:35:26
+ * @LastEditTime: 2022-01-14 20:32:55
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -54,13 +54,6 @@
               @click="sendToTitle(item)">
         mdi-send
       </v-icon>
-    </template>
-
-    <!-- 暂无数据 -->
-    <template v-slot:no-data>
-      <v-btn color="primary">
-        导入数据
-      </v-btn>
     </template>
   </v-data-table>
 </template>
