@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-09 14:28:22
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-14 20:27:25
+ * @LastEditTime: 2022-01-14 21:20:40
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -54,6 +54,27 @@ export default {
                 //     peopleID: '人员id',
                 //     awarded: false // 是否中奖
                 // }
+            ],
+
+            // 可参与抽奖人员信息
+            canRandom: [
+                //     name: '称呼',
+                //     howContact: '联系方式',
+                //     missTime: '中奖错过次数',
+                //     peopleRemark: '备注',
+                //     peopleID: '人员id',
+            ],
+
+            // 剩余奖品
+            lastGifts: [
+                // {
+                //     name: '赞助人称呼',
+                //     howContact: '赞助人联系方式',
+                //     giftName: '赞助奖品名称',
+                //     giftAmount: '提供数量',
+                //     remaining: '剩余数量',
+                //     giftRemark: '备注/详情',
+                //     peopleID: '赞助人id',
             ],
 
             // 奖池

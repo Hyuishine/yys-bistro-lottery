@@ -1,8 +1,8 @@
 <!--
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:44:42
- * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2022-01-08 20:08:26
+ * @LastEditors: 黄宇/Hyuishine
+ * @LastEditTime: 2022-01-14 20:58:23
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -56,6 +56,5 @@ export default {
 <style lang="scss" scoped>
 #contentBox {
   max-height: calc(100vh - 100px);
-  overflow: auto;
 }
 </style>

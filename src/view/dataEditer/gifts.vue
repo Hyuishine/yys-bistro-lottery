@@ -2,11 +2,11 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 18:11:30
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-14 20:32:08
+ * @LastEditTime: 2022-01-14 22:16:11
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
- * @youWant: 人员数据表
+ * @youWant: 总奖池
 -->
 <template>
   <v-data-table :headers="headers"
@@ -17,6 +17,7 @@
                     'items-per-page-text':'每页多少行',
                     'items-per-page-all-text':'所有'
                 }"
+                item-key="peopleID"
                 show-expand
                 :expanded.sync="expanded"
                 :search="search">

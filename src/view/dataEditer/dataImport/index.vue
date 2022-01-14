@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-09 14:28:13
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-11 23:38:49
+ * @LastEditTime: 2022-01-14 21:44:13
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -93,7 +93,7 @@ export default {
 
     // 处理 初始化数据 数据需要与data中一致
     solveInit (sheetData) {
-
+      console.log(sheetData)
       try {
         // 数据详情见：@\view\data\data.js
         let initData = []
@@ -132,8 +132,10 @@ export default {
       // 数据详情见：@\view\data\data.js
       let using = {
         peoples: [],
+        canRandom: [],
         gifts: [],
-        awarded: []
+        lastGifts: [],
+        awarded: [],
       }
 
       sheetData.forEach(row => {
@@ -143,11 +145,22 @@ export default {
           howContact: row.howContact, // 联系方式
           missTime: 0, // 中奖错过次数
           giftName: row.giftName, // 赞助奖品名称
+          giftAmount: row.giftAmount,// 提供数量
           peopleRemark: row.peopleRemark, // 备注
           giftRemark: row.giftRemark, // 奖品备注/ 详情
           peopleID: row.peopleID, // 人员id
           awarded: '否', // 是否中奖
         })
+
+        // 剩余可参与抽奖人员
+        using.canRandom.push({
+          name: row.name, // 称呼
+          howContact: row.howContact, // 联系方式
+          missTime: 0, // 中奖错过次数
+          peopleRemark: row.peopleRemark, // 备注
+          peopleID: row.peopleID, // 人员id
+        })
+
 
         // 奖池
         if (row.giftName && row.giftName !== '') {
@@ -161,8 +174,21 @@ export default {
               peopleID: row.peopleID // 赞助人id,
             }
           )
+
+          using.lastGifts.push(
+            {
+              name: row.name, // 赞助人称呼
+              giftName: row.giftName, // 赞助奖品名称,
+              giftAmount: row.giftAmount,// 提供数量
+              remaining: row.giftAmount,// 剩余数量
+              giftRemark: row.giftRemark, // 备注/详情
+              peopleID: row.peopleID // 赞助人id,
+            }
+          )
         }
       })
+
+      console.log(sheetData)
       this.$store.state.module.using = using
     },
 
