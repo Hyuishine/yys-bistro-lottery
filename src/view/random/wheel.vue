@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2021-03-25 17:11:38
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-14 21:21:37
+ * @LastEditTime: 2022-01-15 19:45:00
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -10,7 +10,6 @@
 
 //! 需要设置的参数：
     底边：span::before 的 border 
-    //! (不知道是巧合还是什么，在高度为225下，顶角的两倍为这个 )
     高： border-top-width: 已知，为轮盘半径
 
 //! 需要的变量：

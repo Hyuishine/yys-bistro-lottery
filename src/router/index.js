@@ -1,8 +1,8 @@
 /*
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:41:29
- * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2022-01-09 22:17:47
+ * @LastEditors: 黄宇/Hyuishine
+ * @LastEditTime: 2022-01-17 21:34:54
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -22,8 +22,23 @@ const routes = [
                 // 首页
                 path: '/home',
                 name: 'home',
-                component: resolve => require(['@/view/home'], resolve)
+                component: resolve => require(['@/view/home/index.vue'], resolve)
             },
+
+            {
+                // 选择抽奖工具
+                path: '/random',
+                name: 'random',
+                component: resolve => require(['@/view/random/index.vue'], resolve)
+            },
+
+            {
+                // 转盘抽奖
+                path: '/randomWheel',
+                name: 'randomWheel',
+                component: resolve => require(['@/view/random/wheel.vue'], resolve)
+            },
+
             // {
             //     // 数据导入
             //     path: '/dataImport',
