@@ -2,7 +2,7 @@
  * @Author: 黄宇/Hyuishine
  * @Date: 2021-08-11 22:27:58
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-14 21:23:08
+ * @LastEditTime: 2022-01-17 22:23:25
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import dataEditor from '../dataEditer'
+import dataEditor from '../dataEditor'
 import randomWheel from '../random/wheel.vue'
 export default {
   components: { dataEditor, randomWheel },

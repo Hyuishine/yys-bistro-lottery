@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 14:25:48
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-17 21:33:05
+ * @LastEditTime: 2022-01-17 22:23:44
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -29,7 +29,7 @@
                    v-on="on"
                    :color="btn.color"
                    :loading="btnLoading"
-                   @click="btnEvent(btn.methodName)">
+                   @click="btnEvent(btn.path)">
               <!-- 图标 -->
               <v-icon dark>
                 {{ btn.icon }}
@@ -55,20 +55,24 @@ export default {
     // 标题数据、按钮数据、按钮节流阀
     titleContent: '欢迎来到 “小酒馆” 五周年',
     btnData: [
-      { icon: 'mdi-help', color: 'primary', methodName: '', tips: '如何使用？' },
-      { icon: 'mdi-file-export-outline', color: 'secondary', methodName: '', tips: '数据导出' },
-      { icon: 'mdi-square-edit-outline', color: 'accent', methodName: '', tips: '编辑数据' },
-      { icon: 'mdi-chart-bar', color: 'pink lighten-3', methodName: '', tips: '展示数据' },
-      { icon: 'mdi-check-bold', color: 'success', methodName: 'toRandom', tips: '选择抽奖工具' },
+      { icon: 'mdi-help', color: 'primary', path: '', tips: '如何使用？' },
+      { icon: 'mdi-file-export-outline', color: 'secondary', path: '', tips: '数据导出' },
+      { icon: 'mdi-square-edit-outline', color: 'accent', path: '/dataEditor', tips: '编辑数据' },
+      { icon: 'mdi-chart-bar', color: 'pink lighten-3', path: '', tips: '展示数据' },
+      { icon: 'mdi-check-bold', color: 'success', path: '/random', tips: '选择抽奖工具' },
     ],
     btnLoading: false
   }),
   methods: {
     // 处理顶部按钮事件
-    btnEvent (methodName) {
-      if (methodName && typeof this[methodName] === 'function') {
+    btnEvent (targetPath) {
+      if (targetPath) {
         this.btnLoading = true
-        this[methodName]()
+
+        // 去往目标页面
+        this.$router.push({
+          path: targetPath
+        })
 
         let timer = setTimeout(() => {
           this.btnLoading = false
@@ -77,12 +81,6 @@ export default {
       }
     },
 
-    // 去开始随机抽奖 页面
-    toRandom () {
-      this.$router.push({
-        path: '/random'
-      })
-    }
   }
 }
 </script>

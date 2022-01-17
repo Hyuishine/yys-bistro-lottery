@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-09 14:28:13
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-14 21:44:13
+ * @LastEditTime: 2022-01-17 23:15:01
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -93,7 +93,6 @@ export default {
 
     // 处理 初始化数据 数据需要与data中一致
     solveInit (sheetData) {
-      console.log(sheetData)
       try {
         // 数据详情见：@\view\data\data.js
         let initData = []
@@ -119,7 +118,7 @@ export default {
 
         // 存储元数据 备用
         if (initData.length !== 0) {
-          this.$store.state.sheetData = initData
+          this.$store.state.module.sheetData = initData
           this.initializeData(initData)
         }
       } catch (error) {
@@ -188,7 +187,6 @@ export default {
         }
       })
 
-      console.log(sheetData)
       this.$store.state.module.using = using
     },
 
