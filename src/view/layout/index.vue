@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:44:42
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-14 20:58:23
+ * @LastEditTime: 2022-01-18 22:51:22
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -30,9 +30,7 @@
                    :sm="12"
                    :xs="12"
                    id="contentBox">
-              <keep-alive>
-                <router-view></router-view>
-              </keep-alive>
+              <router-view></router-view>
             </v-col>
           </v-row>
 
