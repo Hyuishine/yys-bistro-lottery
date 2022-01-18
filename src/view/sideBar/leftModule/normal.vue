@@ -2,7 +2,7 @@
  * @Author: 黄宇/Hyuishine
  * @Date: 2022-01-14 22:32:04
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-17 23:26:36
+ * @LastEditTime: 2022-01-18 21:45:09
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -15,7 +15,7 @@
            cols="12">
       <v-switch v-model="autoSub"
                 inset
-                :label="autoSub ? '自动去除已抽人员' : '不自动去除已抽人员'"></v-switch>
+                :label="autoSub ? '不会重复中奖' : '抽中后还有资格继续被抽中'"></v-switch>
     </v-col>
 
     <v-col xl="6"
@@ -135,10 +135,10 @@ export default {
     // 已选中的奖池
     selected: {
       get () {
-        return this.$store.state.module.settings.normal.jackportSettings.selected
+        return this.$store.state.module.settings.normal.jackportSettings.curGifts
       },
       set (n) {
-        this.$store.state.module.settings.normal.jackportSettings.selected = n
+        this.$store.state.module.settings.normal.jackportSettings.curGifts = n
       }
     },
 
