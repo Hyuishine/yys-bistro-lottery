@@ -31,48 +31,6 @@
 
         <v-spacer></v-spacer>
 
-        <!-- 新增/修改弹窗 -->
-        <v-dialog v-model="dialog"
-                  max-width="500px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary"
-                   dark
-                   v-bind="attrs"
-                   v-on="on">
-              新增
-            </v-btn>
-          </template>
-
-          <v-card>
-            <!-- 新增/修改  弹窗标题 -->
-            <v-card-title>
-              <span class="text-h5">{{ formTitle }}</span>
-            </v-card-title>
-
-            <!-- 新增/修改 表单项 ,当列项数据 headers 中的formItem值为flase 时不创建-->
-            <v-card-text>
-              <v-container>
-                //todo 从人员中查找没有的人员选择 加入
-              </v-container>
-            </v-card-text>
-
-            <!-- 新增/修改弹窗 操作按钮 -->
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="primary"
-                     text
-                     @click="close">
-                取消
-              </v-btn>
-              <v-btn color="primary"
-                     dark
-                     @click="save">
-                保存
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-
         <!-- 删除提示框 -->
         <v-dialog v-model="dialogDelete"
                   max-width="500px">
