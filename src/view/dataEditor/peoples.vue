@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 18:11:30
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-12 00:44:05
+ * @LastEditTime: 2022-01-24 20:42:53
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -16,9 +16,6 @@
                 :footer-props="{
                     'items-per-page-text':'每页多少行',
                     'items-per-page-all-text':'所有'}"
-                show-expand
-                :expanded.sync="expanded"
-                item-key="peopleID"
                 :search="search">
     <template v-slot:top>
       <v-toolbar flat>
@@ -69,32 +66,21 @@
                     </v-col>
 
                     <v-col cols="6">
-                      <v-text-field v-model="editFormObject.giftName"
-                                    label="赞助奖品名称"></v-text-field>
+                      <v-text-field v-model.number="editFormObject.ID"
+                                    label="游戏ID"
+                                    :rules="formRule.ID"></v-text-field>
                     </v-col>
 
                     <v-col cols="6">
-                      <v-text-field v-model.number="editFormObject.giftAmount"
-                                    label="赞助数量"></v-text-field>
+                      <v-text-field v-model.number="editFormObject.rank"
+                                    label="斗技分"></v-text-field>
                     </v-col>
 
-                    <v-col cols="12">
-                      <!-- <v-text-field v-model="editFormObject.peopleRemark"
-                                  label="备注"></v-text-field> -->
-
-                      <v-textarea v-model="editFormObject.peopleRemark"
-                                  auto-grow
-                                  label="备注"
-                                  rows="1" />
-
+                    <v-col cols="6">
+                      <v-text-field v-model.number="editFormObject.contribution"
+                                    label="勋章数"></v-text-field>
                     </v-col>
 
-                    <v-col cols="12">
-                      <v-textarea v-model="editFormObject.giftRemark"
-                                  auto-grow
-                                  label="奖品备注/详情"
-                                  rows="1" />
-                    </v-col>
                   </v-row>
                 </v-form>
               </v-container>
@@ -137,14 +123,6 @@
       </v-toolbar>
     </template>
 
-    <!-- 详情下拉框 -->
-    <template v-slot:expanded-item="{ headers, item }">
-      <td :colspan="headers.length">
-        <p>备注： {{ item.peopleRemark ? item.peopleRemark : '暂无' }} </p>
-        <p>奖品备注： {{ item.giftRemark ? item.giftRemark : '暂无' }}</p>
-      </td>
-    </template>
-
     <!-- 操作列 -->
     <template v-slot:item.actions="{ item }">
       <v-icon small
@@ -173,7 +151,6 @@ export default {
     search: '', // 搜索条件
     dialog: false, // 新增/修改 弹窗是否显示状态
     dialogDelete: false, // 删除弹窗的状态
-    expanded: [], // 展开的详情
     headers: [ //! 表格 列头数据 及表单项数据
       /*
         text:列名，表单label
@@ -185,30 +162,32 @@ export default {
       */
       { text: '称呼', align: 'start', value: 'name', },
       { text: '联系方式', value: 'howContact' },
+      { text: '游戏ID', value: 'ID' },
+      { text: '斗技分', value: 'rank' },
+      { text: '勋章数', value: 'contribution' },
       { text: '已中奖', value: 'awarded' },
       { text: '中奖错过次数', value: 'missTime' },
-      { text: '赞助奖品名称', value: 'giftName' },
-      { text: '赞助数量', value: 'giftAmount' },
-      { text: '备注', value: 'peopleRemark' },
-      { text: '奖品备注/详情', value: 'giftRemark', },
-      { text: '人员id', value: 'peopleID', sortable: false },
       { text: '操作', value: 'actions', sortable: false },
     ],
     formRule: {
       name: [v => !!v || '称呼必填'],
+      ID: [v => Number(v) || '游戏ID必填，且须是数字']
     },
 
     editedIndex: -1, // 当前编辑的行
     editFormObject: { // 编辑 表单的绑定项 设定的默认值 需要与下方defaultItem一致
       name: '',
       howContact: '',
-      giftName: '',
-      giftAmount: 1,
-      peopleRemark: '',
-      giftRemark: ''
+      ID: null,
+      rank: 1000,
+      contribution: 0,
+      awarded: false,
+      missTime: 0,
     },
     defaultItem: { // 新增时的 默认值
-      giftAmount: 1
+      rank: 1000,
+      awarded: false,
+      missTime: 0,
     },
   }),
 
@@ -261,7 +240,6 @@ export default {
 
     // 确定删除，将当前编辑的行index给删掉
     deleteItemConfirm () {
-      this.syncEdit()
       this.listData.splice(this.editedIndex, 1)
       this.closeDelete()
     },
@@ -286,57 +264,7 @@ export default {
           this.editFormObject.peopleID = idCreator(this.editFormObject, this.listData.length)
           this.listData.push(this.editFormObject)
         }
-        this.syncEdit(this.close)
       }
-    },
-
-    // 同步修改礼物信息
-    syncEdit (callback) {
-
-      // 人员id，奖池序号
-      const peopleID = this.editFormObject.peopleID || this.listData[this.editedIndex].peopleID
-
-      let gifts = this.$store.state.module.using.gifts
-
-      const awardIndex = gifts.findIndex((gift) => { //
-        return gift.peopleID === peopleID
-      })
-
-      const obj = {
-        name: this.editFormObject.name,
-        giftName: this.editFormObject.giftName,
-        giftAmount: this.editFormObject.giftAmount,
-        remaining: awardIndex > -1 ? gifts[awardIndex].remaining : this.editFormObject.giftAmount,
-        giftRemark: this.editFormObject.giftRemark,
-        peopleID: this.editFormObject.peopleID
-      }
-
-      switch (true) {
-        // 有相同的赞助人id，且有礼物名称，//! 修改
-        case awardIndex > -1 && !!this.editFormObject.giftName: {
-          gifts.splice(awardIndex, 1, obj)
-          break
-        }
-
-        // 有相同的赞助人id，但是 是直接在操作列点的删除 //! 删除
-        case awardIndex > -1 && this.dialogDelete: {
-          gifts.splice(awardIndex, 1)
-          break
-        }
-
-        // 有相同的赞助人id，但没有了礼物名称，//! 删除
-        case awardIndex > -1 && !this.editFormObject.giftName: {
-          gifts.splice(awardIndex, 1)
-          break
-        }
-
-        // 没有相同的赞助人id，但有礼物名称 //! 新增
-        case awardIndex === -1 && !!this.editFormObject.giftName: {
-          gifts.push(obj)
-          break
-        }
-      }
-      callback && callback()
     }
   }
 }
