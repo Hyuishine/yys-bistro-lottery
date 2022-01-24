@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 18:11:30
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-14 21:51:50
+ * @LastEditTime: 2022-01-24 21:15:32
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -16,9 +16,6 @@
                 :footer-props="{
                     'items-per-page-text':'每页多少行',
                     'items-per-page-all-text':'所有'}"
-                show-expand
-                :expanded.sync="expanded"
-                item-key="peopleID"
                 :search="search">
     <template v-slot:top>
       <v-toolbar flat>
@@ -30,40 +27,7 @@
                       hide-details></v-text-field>
 
         <v-spacer></v-spacer>
-
-        <!-- 删除提示框 -->
-        <v-dialog v-model="dialogDelete"
-                  max-width="500px">
-          <v-card>
-            <v-card-title class="text-h5">确认删除？</v-card-title>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="primary"
-                     text
-                     @click="closeDelete">取消</v-btn>
-              <v-btn color="primary"
-                     dark
-                     @click="deleteItemConfirm">确定</v-btn>
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
       </v-toolbar>
-    </template>
-
-    <!-- 详情下拉框 -->
-    <template v-slot:expanded-item="{ headers, item }">
-      <td :colspan="headers.length">
-        <p>备注： {{ item.peopleRemark ? item.peopleRemark : '暂无' }} </p>
-      </td>
-    </template>
-
-    <!-- 操作列 -->
-    <template v-slot:item.actions="{ item }">
-      <v-icon small
-              @click="deleteItem(item)">
-        mdi-delete
-      </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -86,68 +50,21 @@ export default {
       */
       { text: '称呼', align: 'start', value: 'name', },
       { text: '联系方式', value: 'howContact' },
+      { text: '游戏ID', value: 'ID' },
+      { text: '斗技分', value: 'rank' },
+      { text: '勋章数', value: 'contribution' },
       { text: '中奖错过次数', value: 'missTime' },
-      { text: '备注', value: 'peopleRemark' },
-      { text: '人员id', value: 'peopleID', sortable: false },
-      { text: '操作', value: 'actions', sortable: false },
     ],
-
-    deleteIndex: -1, // 当前编辑的行
-    defaultItem: { // 新增时的 默认值
-      giftAmount: 1
-    },
   }),
 
   computed: {
-    formTitle () { // 新增/编辑 弹窗的标题
-      return this.deleteIndex === -1 ? '新增' : '编辑'
-    },
-    listData () {  // 列表数据
-      return this.$store.state.module.using.canRandom
-    }
-  },
-
-  watch: {
-    dialog (val) { // false 时关闭新增/编辑表单
-      val || this.close()
-    },
-    dialogDelete (val) { // false 时关闭 删除提示弹窗
-      val || this.closeDelete()
-    },
-  },
-
-  methods: {
-
-    // 新增、编辑取消，重置编辑表单
-    close () {
-      this.dialog = false
-      this.$nextTick(() => {
-        this.deleteIndex = -1
-      })
-    },
-
-    // 删除
-    deleteItem (row) {
-      this.deleteIndex = this.listData.indexOf(row)
-      this.dialogDelete = true
-    },
-
-    // 确定删除，将当前编辑的行index给删掉
-    deleteItemConfirm () {
-      this.listData.splice(this.deleteIndex, 1)
-      this.closeDelete()
-    },
-
-    // 取消删除 重置编辑表单
-    closeDelete () {
-      this.dialogDelete = false
-      this.$nextTick(() => {
-        this.deleteIndex = -1
-      })
-    },
-
-    // 新增/编辑   保存，如果有正在编辑的index，则是编辑，否则是新增
-    save () {
+    listData () {  // 列表数据 从人员数据中过滤出 没有中过奖的人
+      const source = this.$store.state.module.using.peoples
+      return source.filter(
+        people => {
+          return people.awarded || people
+        }
+      )
     }
   }
 }
