@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-09 14:28:13
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-17 23:15:01
+ * @LastEditTime: 2022-01-24 20:54:14
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -11,27 +11,15 @@
 <template>
   <v-card>
     <v-card-title>
-      <!-- 初始数据 -->
+      <!-- 参与人员 -->
       <v-file-input multiple
                     small-chips
                     accept=".xlsx"
-                    label="点此导入 初始数据"
+                    label="点此导入数据"
                     show-size
                     hint="每次导入均会覆盖原有导入数据"
                     truncate-length="15"
-                    @change="importFile($event,'初始数据')"></v-file-input>
-
-      <v-spacer></v-spacer>
-
-      <!-- 备份数据 -->
-      <v-file-input multiple
-                    small-chips
-                    accept=".xlsx"
-                    label="点此导入 备份数据，以恢复"
-                    show-size
-                    hint="每次导入均会覆盖原有导入数据"
-                    truncate-length="15"
-                    @change="importFile($event,'恢复备份')"></v-file-input>
+                    @change="importFile($event)" />
     </v-card-title>
   </v-card>
 </template>
@@ -50,7 +38,7 @@ export default {
   methods: {
 
     // 导入
-    importFile (file, type) {
+    importFile (file) {
       if (file.length === 0) {
         return
       }
@@ -67,22 +55,15 @@ export default {
           var data = file.target.result;
           sheetObj = XLSX.read(data, { type: 'binary' });
 
-          // ! 将导入的excel 数据表，表名存入store中
+          // ! 将导入的excel 数据表，表名暂存
           for (var i = 0; i < sheetObj.SheetNames.length; i++) {
             sheetData.push(XLSX.utils.sheet_to_json(sheetObj.Sheets[sheetObj.SheetNames[i]]))
             sheetName.push(sheetObj.SheetNames[i])
           }
 
-          switch (type) {
-            case '初始数据': {
-              self.solveInit(sheetData)
-              break
-            }
-            case '恢复备份': {
-              self.solveBackup()
-              break
-            }
-          }
+          self.solvePeople(sheetData[0])
+          self.solveGifts(sheetData[1])
+
         };
         reader.readAsBinaryString(file[0]);
       } catch (error) {
@@ -91,26 +72,25 @@ export default {
       }
     },
 
-    // 处理 初始化数据 数据需要与data中一致
-    solveInit (sheetData) {
+    //! 处理 参与人员数据
+    solvePeople (sheetData) {
       try {
-        // 数据详情见：@\view\data\data.js
+        // 数据详情见：@\data\data.js
         let initData = []
 
-        // 初始化数据 只有一张表
-        sheetData[0].forEach((row, i) => {
+        //! 当每行数据 中存在“称呼”的数据时，视为有效数据，则整理成人员数据
+        sheetData.forEach((row) => {
 
-          if (row['人员称呼']) {
-            // 获取元数据
+          if (row['称呼']) {
             initData.push(
               {
-                name: row['人员称呼'],
+                name: row['称呼'],
                 howContact: row['联系方式'] || '',
-                peopleRemark: row['人员备注'] || '',
-                giftName: row['赞助奖品名称'] || '',
-                giftAmount: row['赞助数量'] || '',
-                giftRemark: row['奖品备注/详情'] || '',
-                peopleID: idCreator(row, i),
+                ID: row['游戏ID'] || '',
+                rank: row['斗技分'] || '',
+                contribution: row['勋章数'] || '',
+                missTime: 0, // 中将错过次数
+                awarded: false // 是否中奖
               }
             )
           }
@@ -118,83 +98,46 @@ export default {
 
         // 存储元数据 备用
         if (initData.length !== 0) {
-          this.$store.state.module.sheetData = initData
-          this.initializeData(initData)
+          this.$store.state.module.sheetData.peoples = initData // 初始数据备份
+          this.$store.state.module.using.peoples = initData // 总人员数据
         }
       } catch (error) {
         alert('数据错误' + error)
       }
     },
 
-    //! 初始化数据，数据需要与data中一致
-    initializeData (sheetData) {
-      // 数据详情见：@\view\data\data.js
-      let using = {
-        peoples: [],
-        canRandom: [],
-        gifts: [],
-        lastGifts: [],
-        awarded: [],
-      }
+    //! 处理奖池数据
+    solveGifts (sheetData) {
+      try {
+        // 数据详情见：@\view\data\data.js
+        let initData = []
 
-      sheetData.forEach(row => {
-        // 人员数据
-        using.peoples.push({
-          name: row.name, // 称呼
-          howContact: row.howContact, // 联系方式
-          missTime: 0, // 中奖错过次数
-          giftName: row.giftName, // 赞助奖品名称
-          giftAmount: row.giftAmount,// 提供数量
-          peopleRemark: row.peopleRemark, // 备注
-          giftRemark: row.giftRemark, // 奖品备注/ 详情
-          peopleID: row.peopleID, // 人员id
-          awarded: '否', // 是否中奖
+        // 初始化数据 只有一张表
+        sheetData.forEach((row, i) => {
+
+          if (row['称呼'] && row['赞助奖品名称']) {
+            // 获取元数据
+            initData.push(
+              {
+                name: row['称呼'],
+                howContact: row['联系方式'] || '',
+                giftName: row['赞助奖品名称'] || '',
+                giftAmount: row['赞助数量'] || 1,
+                giftInfo: row['奖品详情'] || '',
+                giftID: idCreator(row, i),
+              }
+            )
+          }
         })
 
-        // 剩余可参与抽奖人员
-        using.canRandom.push({
-          name: row.name, // 称呼
-          howContact: row.howContact, // 联系方式
-          missTime: 0, // 中奖错过次数
-          peopleRemark: row.peopleRemark, // 备注
-          peopleID: row.peopleID, // 人员id
-        })
-
-
-        // 奖池
-        if (row.giftName && row.giftName !== '') {
-          using.gifts.push(
-            {
-              name: row.name, // 赞助人称呼
-              giftName: row.giftName, // 赞助奖品名称,
-              giftAmount: row.giftAmount,// 提供数量
-              remaining: row.giftAmount,// 剩余数量
-              giftRemark: row.giftRemark, // 备注/详情
-              peopleID: row.peopleID // 赞助人id,
-            }
-          )
-
-          using.lastGifts.push(
-            {
-              name: row.name, // 赞助人称呼
-              giftName: row.giftName, // 赞助奖品名称,
-              giftAmount: row.giftAmount,// 提供数量
-              remaining: row.giftAmount,// 剩余数量
-              giftRemark: row.giftRemark, // 备注/详情
-              peopleID: row.peopleID // 赞助人id,
-            }
-          )
+        // 存储元数据 备用
+        if (initData.length !== 0) {
+          this.$store.state.module.sheetData.gifts = initData // 初始数据备份
+          this.$store.state.module.using.gifts = initData // 总人员数据
         }
-      })
-
-      this.$store.state.module.using = using
-    },
-
-    // 处理备份恢复数据
-    solveBackup (sheetData) {
-
-
-      console.log(sheetData)
+      } catch (error) {
+        alert('数据错误' + error)
+      }
     }
   }
 }
