@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 18:11:30
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-14 20:32:55
+ * @LastEditTime: 2022-01-24 22:09:09
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -17,8 +17,6 @@
                     'items-per-page-text':'每页多少行',
                     'items-per-page-all-text':'所有'
                 }"
-                show-expand
-                :expanded.sync="expanded"
                 :search="search">
     <template v-slot:top>
       <v-toolbar flat>
@@ -32,14 +30,6 @@
         <v-spacer></v-spacer>
 
       </v-toolbar>
-    </template>
-
-    <!-- 详情下拉框 -->
-    <template v-slot:expanded-item="{ headers, item }">
-      <td :colspan="headers.length">
-        <p>奖品备注/详情： {{ item.giftRemark || '暂无' }}</p>
-        <p>赞助人备注 {{ item.sponsorRemarks || '暂无' }}</p>
-      </td>
     </template>
 
     <!-- 操作列 -->
@@ -61,7 +51,6 @@
 export default {
   data: () => ({
     search: '', // 搜索条件
-    expanded: [], // 展开的详情
     headers: [ //! 表格 列头数据 及表单项数据
       /*
         text:列名，表单label
@@ -72,28 +61,24 @@ export default {
         formItem:允许被编辑新增？
       */
       { text: '中奖人称呼', align: 'start', value: 'winner', },
-      { text: '赞助人称呼', value: 'sponsor' },
-      { text: '奖品名称', value: 'giftName' },
-      { text: '中奖数量', value: 'winningsNum' },
-      { text: '中奖人联系方式', value: 'winnerContact' },
-      { text: '赞助人联系方式', value: 'sponsorContact' },
-      { text: '奖品备注/详情', value: 'giftRemark' },
-      { text: '赞助人备注', value: 'sponsorRemarks' },
-      { text: '中奖人id', value: 'winnerID', sortable: false, formItem: false },
-      { text: '赞助人id', value: 'sponsorID', sortable: false, formItem: false },
+      { text: '所中奖品', value: 'giftName' },
+      { text: '赞助人广告', value: 'sponsorAD' },
       { text: '操作', value: 'actions', sortable: false, formItem: false },
-    ],
-    listData: [], // 列表数据
+    ]
   }),
 
-  created () {
-    this.initialize()
+  computed: {
+    listData () {  // 列表数据 从奖池数据中过滤出  有中奖人的 奖品
+      const source = this.$store.state.module.using.gifts
+      return source.filter(
+        gift => {
+          return !!gift.winner
+        }
+      )
+    }
   },
 
   methods: {
-    initialize () {
-      this.listData = this.$store.state.module.using.awarded
-    },
 
     // todo 复制到剪贴板
     copy (row) {

@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-09 14:28:22
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-24 21:17:35
+ * @LastEditTime: 2022-01-24 22:04:21
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -48,12 +48,17 @@ export default {
                 // {
                 //     name: '称呼',
                 //     howContact: '联系方式',
-                //     giftName: '赞助奖品名称',
                 //     ID:'游戏ID',  // 唯一，必要
                 //     rank:'斗技分'
                 //     contribution:'勋章数'
+                //! 以下由后续计算获得
                 //     missTime: '中奖错过次数',
                 //     awarded: false // 是否中奖
+                //     prize:'所获奖品名称',
+                //     sponsorName: '赞助人名称' //
+                //     sponsorContact: '赞助人联系方式'
+                //     giftInfo:'奖品详情',
+                //     sponsorAD  赞助人广告
                 // }
             ],
 
@@ -64,23 +69,13 @@ export default {
                 //     howContact: '联系方式',
                 //     giftName: '赞助奖品名称',
                 //     giftAmount: '赞助数量',
-                //     remaining: '剩余数量'
                 //     giftInfo: '奖品详情',
                 //     sponsorAD:'赞助人广告',
-                //     giftID:'奖品ID'
-                // }
-            ],
-
-            // 获奖数据
-            awarded: [
-                // {
+                //! 以下由后续计算获得
+                //     remaining: '剩余数量'
+                //     giftID:'奖品ID',
                 //     winner: '中奖人称呼',
-                //     sponsor: '赞助人称呼',
-                //     giftName: '奖品名称',
                 //     winnerContact: '中奖人联系方式',
-                //     sponsorContact: '赞助人联系方式',
-                //     giftInfo: '奖品详情',
-                //     sponsorAD: '赞助人广告',
                 //     winnerID: '中奖人游戏ID',
                 // }
             ],
