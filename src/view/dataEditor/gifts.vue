@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 18:11:30
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-14 22:16:11
+ * @LastEditTime: 2022-01-24 21:43:17
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -17,7 +17,7 @@
                     'items-per-page-text':'每页多少行',
                     'items-per-page-all-text':'所有'
                 }"
-                item-key="peopleID"
+                item-key="giftID"
                 show-expand
                 :expanded.sync="expanded"
                 :search="search">
@@ -35,6 +35,15 @@
         <!-- 修改弹窗 -->
         <v-dialog v-model="dialog"
                   max-width="500px">
+
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn color="primary"
+                   dark
+                   v-bind="attrs"
+                   v-on="on">
+              新增
+            </v-btn>
+          </template>
 
           <v-card>
             <!-- 修改  弹窗标题 -->
@@ -65,9 +74,9 @@
                     </v-col>
 
                     <v-col cols="12">
-                      <v-textarea v-model="editFormObject.giftRemark"
+                      <v-textarea v-model="editFormObject.giftInfo"
                                   auto-grow
-                                  label="奖品备注/详情"
+                                  label="奖品详情"
                                   rows="1" />
                     </v-col>
                   </v-row>
@@ -116,7 +125,8 @@
     <!-- 详情下拉框 -->
     <template v-slot:expanded-item="{ headers, item }">
       <td :colspan="headers.length">
-        <p>奖品备注： {{ item.giftRemark ? item.giftRemark : '暂无' }}</p>
+        <p>奖品详情： {{ item.giftInfo ? item.giftInfo : '暂无' }}</p>
+        <p>赞助商广告： {{ item.sponsorAD ? item.sponsorAD : '暂无' }}</p>
       </td>
     </template>
 
@@ -134,7 +144,10 @@
 
   </v-data-table>
 </template>
+
 <script>
+import { idCreator } from '@/utils/idCreator'
+
 export default {
   data: () => ({
     search: '', // 搜索条件
@@ -155,8 +168,9 @@ export default {
       { text: '赞助人联系方式', value: 'howContact', },
       { text: '赞助数量', value: 'giftAmount' },
       { text: '剩余数量', value: 'remaining' },
-      { text: '备注/详情', value: 'giftRemark' },
-      { text: '赞助人id', value: 'peopleID', sortable: false },
+      { text: '详情', value: 'giftInfo', sortable: false },
+      { text: '赞助人广告', value: 'sponsorAD', sortable: false },
+      { text: '奖品ID', value: 'giftID', sortable: false },
       { text: '操作', value: 'actions', sortable: false },
     ],
     formRule: {
@@ -170,7 +184,7 @@ export default {
       giftAmount: 1,
       remaining: 1,
       giftName: '',
-      giftRemark: '',
+      giftInfo: '',
     }
   }),
 
@@ -220,7 +234,6 @@ export default {
 
     // 确定删除，将当前编辑的行index给删掉
     deleteItemConfirm () {
-      this.syncEdit()
       this.listData.splice(this.editedIndex, 1)
       this.closeDelete()
     },
@@ -236,54 +249,16 @@ export default {
     // 编辑   保存
     save () {
       if (this.$refs.giftForm.validate()) {
-        Object.assign(this.listData[this.editedIndex], this.editFormObject)
-        this.syncEdit(this.close())
-      }
-    },
 
-    // 同步修改人员信息
-    syncEdit (callBack) {
-      // 人员id，人员信息，该奖品在奖池中对应的人员信息的序列号
-      const peopleID = this.editFormObject.peopleID || this.listData[this.editedIndex].peopleID
-
-      let peopleInfo = this.$store.state.module.using.peoples
-
-      const peopleIndex = peopleInfo.findIndex((people) => {
-        return people.peopleID === peopleID
-      })
-
-
-      switch (true) {
-
-        // 如果有奖品名称，则修改
-        case !!this.editFormObject.giftName: {
-          peopleInfo[peopleIndex].giftName = this.editFormObject.giftName // 奖品名称
-          peopleInfo[peopleIndex].giftAmount = this.editFormObject.giftAmount // 赞助数量
-          peopleInfo[peopleIndex].giftRemark = this.editFormObject.giftRemark // 奖品备注
-
-          break
-        }
-
-        // 如果没有奖品名称 则删除
-        case !this.editFormObject.giftName: {
-          peopleInfo[peopleIndex].giftName = '' // 奖品名称
-          peopleInfo[peopleIndex].giftAmount = '' // 赞助数量
-          peopleInfo[peopleIndex].giftRemark = '' // 奖品备注
-
-          break
-        }
-
-        // 如果点了 操作列上的删除
-        case this.dialogDelete: {
-          peopleInfo[peopleIndex].giftName = '' // 奖品名称
-          peopleInfo[peopleIndex].giftAmount = '' // 赞助数量
-          peopleInfo[peopleIndex].giftRemark = '' // 奖品备注
-
-          break
+        // 编辑
+        if (this.editedIndex > -1) {
+          Object.assign(this.listData[this.editedIndex], this.editFormObject)
+        } else {
+          // 新增
+          this.editFormObject.giftID = idCreator(this.editFormObject, this.listData.length)
+          this.listData.push(this.editFormObject)
         }
       }
-
-      callBack && callBack()
     }
   }
 }
