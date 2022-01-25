@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2021-03-25 17:11:38
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-18 23:58:00
+ * @LastEditTime: 2022-01-25 23:09:24
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -56,20 +56,21 @@
             :key="i"
             :style="'transform:rotate('+ i * (360 / random_items.length) + 'deg);--borderWdith:'+ ( 360 / random_items.length) * 4 +'px;'">
         <!-- 奖池上显示的文字 -->
-        <i>{{ random_type === '人员' ? item.name : item.giftName  }}</i>
+        <i>{{  item.name }}</i>
       </span>
     </div>
 
-    <v-card class="awardedBar"
-            v-if="false">
-      <v-card-title class="text-h2">123</v-card-title>
+    <v-card class="awardedBar">
+      <v-card-title class="text-h2"
+                    title="双击关闭"
+                    v-if="status_awarded"
+                    @dblclick="status_awarded = !status_awarded">{{  currentSelect.name }}</v-card-title>
     </v-card>
 
   </div>
 </template>
 <script>
-import _ from 'lodash'
-import { subAwardPeople, curRandomItems } from '@/utils/public' // 自动去除重复中奖资格, 当前随机向
+import { logWinner, hasCurGift } from "../../utils/public"
 
 export default {
   name: 'components_randomwheel',
@@ -77,24 +78,18 @@ export default {
     return {
       scroll_Nums: 0, // 滚动格数
       scroll_status: false, // 是否正在滚动
-
       timer_start: null, // 控制滚动频率的定时器
-
-      random_type: '人员', // 抽奖类型 人员/奖品
-      random_items: [], // 轮盘中的三角形  当前随机项
+      status_awarded: false, // 是否显示中奖信息
     }
   },
   methods: {
-    shuffle () {
-      this.random_items = _.shuffle(this.random_items)
-    },
 
     // 开始 停止 切换
     toogleRandom () {
-      if (!this.scroll_status) {
+      if (!this.scroll_status && hasCurGift()) {
         //! 开始
         this.start()
-      } else {
+      } else if (this.scroll_status) {
         //! 停止
         this.stop()
       }
@@ -116,7 +111,9 @@ export default {
       this.timer_start = null
       this.scroll_status = false
 
-      subAwardPeople()
+      this.status_awarded = true
+
+      logWinner(this.currentSelect)
     }
   },
   computed: {
@@ -139,18 +136,24 @@ export default {
         temp = (this.scroll_Nums * -1) % this.random_items.length
       }
       return this.random_items[temp]
-    }
-  },
+    },
 
-  watch: {
+    // 当前随机项
+    random_items () {
+      const jackport = this.$store.state.module.settings.jackportSettings
 
-    // 根据当前随机的类型(人员/奖品) 获取对应的随机向
-    random_type: {
-      handler (n) {
-        this.random_items = curRandomItems(n)
-      },
-      deep: true,
-      immediate: true
+      // 选定的人员
+      if (jackport.curPeoples.length !== 0) {
+        return jackport.curPeoples
+      } else {
+        return this.$store.state.module.using.peoples
+        // // 剩余全部可抽奖人员
+        // return this.$store.state.module.using.peoples.filter(
+        //   people => {
+        //     return people.awarded || people
+        //   }
+        // )
+      }
     }
   }
 }

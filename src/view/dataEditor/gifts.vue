@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 18:11:30
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-24 21:43:17
+ * @LastEditTime: 2022-01-26 00:45:57
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -11,6 +11,8 @@
 <template>
   <v-data-table :headers="headers"
                 :items="listData"
+                height="500px"
+                fixed-header
                 no-results-text="没有搜索到，是否需要新增？"
                 no-data-text="没有数据，请在人员处导入或新增。"
                 :footer-props="{

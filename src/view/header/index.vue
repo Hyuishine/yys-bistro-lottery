@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 14:25:48
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-17 22:23:44
+ * @LastEditTime: 2022-01-26 00:52:34
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -56,9 +56,8 @@ export default {
     titleContent: '欢迎来到 “小酒馆” 五周年',
     btnData: [
       { icon: 'mdi-help', color: 'primary', path: '', tips: '如何使用？' },
-      { icon: 'mdi-file-export-outline', color: 'secondary', path: '', tips: '数据导出' },
       { icon: 'mdi-square-edit-outline', color: 'accent', path: '/dataEditor', tips: '编辑数据' },
-      { icon: 'mdi-chart-bar', color: 'pink lighten-3', path: '', tips: '展示数据' },
+      // { icon: 'mdi-chart-bar', color: 'pink lighten-3', path: '', tips: '展示数据' },
       { icon: 'mdi-check-bold', color: 'success', path: '/random', tips: '选择抽奖工具' },
     ],
     btnLoading: false

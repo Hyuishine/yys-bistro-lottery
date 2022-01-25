@@ -2,7 +2,7 @@
  * @Author: 黄宇/Hyuishine
  * @Date: 2022-01-18 21:18:02
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-18 22:49:35
+ * @LastEditTime: 2022-01-25 23:54:50
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -12,53 +12,61 @@
 import store from '@/store/index.js'
 
 // 设置
-const settings = store.state.module.settings
+const module = store.state.module
 
-/* 
-    name:   去除可参与抽奖资格
-    info:   如果常规设置中开启了 自动去除 已中奖人员的再次中奖资格，则从剩余可参与抽奖人员中删除掉
-    params: peopleID：人员ID
-*/
-export function subAwardPeople (peopleID) {
+//! 记录抽奖信息 peopleInfo:中奖人信息
+export function logWinner (peopleInfo) {
+    // 角色序号
+    const peopleIndex = module.using.peoples.indexOf(peopleInfo)
 
-    if (peopleID && settings.normal.autoSub) {
-        const peopleIndex = store.state.module.using.canRandom.findIndex((people) => {
-            return people.peopleID === peopleID
-        })
+    // 赞助奖品序号
+    const giftIndex = module.using.gifts.indexOf(module.settings.jackportSettings.curGifts)
 
-        store.state.module.using.canRandom.splice(peopleIndex, 1)
+    // 更新赞助奖品的数据
+    module.using.gifts[giftIndex].remaining-- // 剩余数量减一
+    module.using.gifts[giftIndex].winner = peopleInfo.name // 记录中奖人昵称
+    module.using.gifts[giftIndex].winnerContact = peopleInfo.howContact // 记录中奖人联系方式
+    module.using.gifts[giftIndex].winnerID = peopleInfo.ID // 记录中奖人游戏id
+
+
+    // 更新中奖人数据
+    module.using.peoples[peopleIndex].awarded = true // 标记为已中奖
+    module.using.peoples[peopleIndex].prize = module.using.gifts[giftIndex].giftName // 所获奖品名称
+    module.using.peoples[peopleIndex].sponsorName = module.using.gifts[giftIndex].giftName // 赞助人昵称
+    module.using.peoples[peopleIndex].sponsorContact = module.using.gifts[giftIndex].howContact // 赞助人联系方式
+    module.using.peoples[peopleIndex].giftInfo = module.using.gifts[giftIndex].giftInfo // 赞助人联系方式
+    module.using.peoples[peopleIndex].sponsorAD = module.using.gifts[giftIndex].sponsorAD // 赞助人广告
+
+    // 当前选中奖品剩余数量为零时清空，否则剩余数量-1
+    if (module.using.gifts[giftIndex].remaining === 0) {
+        module.settings.jackportSettings.curGifts = {}
+    } else {
+        module.settings.jackportSettings.curGifts.remaining--
     }
 }
 
-/* 
-    name:   当前随机项
-    info:   如果常规设置中选择本次随机的奖品、或人员，则返回选中的数据，没有则返回剩余奖品、或剩余可参与抽奖人员
-    params: type:人员/奖品
-*/
-export function curRandomItems (type) {
-    let result = []
+//! 当前是否有选择了 抽哪个奖？
+// 返回值：true，false
+export function hasCurGift () {
 
-    switch (type) {
-        case '人员': {
-            if (settings.normal.jackportSettings.curPeoples.length) {
-                result = settings.normal.jackportSettings.curPeoples
-            } else {
-                result = store.state.module.using.canRandom
-            }
+    const curGift = module.settings.jackportSettings.curGifts
+    let result = true
 
-            break
-        }
-
-        case '奖品': {
-            if (settings.normal.jackportSettings.curGifts.length) {
-                result = settings.normal.jackportSettings.curGifts
-            } else {
-                result = store.state.module.using.lastGifts
-            }
-
-            break
-        }
+    if (JSON.stringify(curGift) === '{}') {
+        alert('当前未选择  需要抽取哪个奖品')
+        result = false
     }
-
     return result
+}
+
+//! 记录中奖错过次数
+export function logMiss (ID) {
+    // 角色序号
+    const peopleIndex = module.using.peoples.findIndex(
+        people => {
+            return people.ID === ID
+        }
+    )
+
+    module.using.peoples[peopleIndex].missTime++
 }

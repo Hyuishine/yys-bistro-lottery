@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:44:42
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-18 22:51:22
+ * @LastEditTime: 2022-01-26 00:27:57
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -34,21 +34,24 @@
             </v-col>
           </v-row>
 
-          <left-settings></left-settings>
-          <right-data></right-data>
+          <left></left>
+          <right></right>
+          <bottom></bottom>
         </v-flex>
       </v-main>
     </v-container>
   </v-app>
 </template>
 <script>
-import leftSettings from '../sideBar/leftSettings.vue'
-import rightData from '../sideBar/rightData.vue'
+import left from '../sideBar/left.vue'
+import right from '../sideBar/right.vue'
+import bottom from '../sideBar/bottom.vue'
+
 import headerBar from '../header'
 
 export default {
   name: 'layout',
-  components: { headerBar, leftSettings, rightData }
+  components: { headerBar, left, right, bottom }
 }
 </script>
 <style lang="scss" scoped>

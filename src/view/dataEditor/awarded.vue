@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 18:11:30
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-24 22:09:09
+ * @LastEditTime: 2022-01-26 00:50:26
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -11,6 +11,8 @@
 <template>
   <v-data-table :headers="headers"
                 :items="listData"
+                height="500px"
+                fixed-header
                 no-results-text="没有搜索到。"
                 no-data-text="暂时没有人中奖。"
                 :footer-props="{
@@ -38,11 +40,6 @@
       <v-icon small
               @click="copy(item)">
         mdi-content-copy
-      </v-icon>
-      <!-- 发送到标题 -->
-      <v-icon small
-              @click="sendToTitle(item)">
-        mdi-send
       </v-icon>
     </template>
   </v-data-table>
@@ -82,12 +79,9 @@ export default {
 
     // todo 复制到剪贴板
     copy (row) {
-      console.log(row)
-    },
-
-    // todo 发送到标题
-    sendToTitle (row) {
-      console.log(row)
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(row);
+      }
     }
   }
 }

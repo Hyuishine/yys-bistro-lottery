@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 18:11:30
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-24 20:42:53
+ * @LastEditTime: 2022-01-26 00:51:27
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -11,6 +11,8 @@
 <template>
   <v-data-table :headers="headers"
                 :items="listData"
+                height="500px"
+                fixed-header
                 no-results-text="没有搜索到，是否需要新增？"
                 no-data-text="没有数据，请导入或新增。"
                 :footer-props="{
@@ -66,18 +68,18 @@
                     </v-col>
 
                     <v-col cols="6">
-                      <v-text-field v-model.number="editFormObject.ID"
+                      <v-text-field v-model="editFormObject.ID"
                                     label="游戏ID"
                                     :rules="formRule.ID"></v-text-field>
                     </v-col>
 
                     <v-col cols="6">
-                      <v-text-field v-model.number="editFormObject.rank"
+                      <v-text-field v-model="editFormObject.rank"
                                     label="斗技分"></v-text-field>
                     </v-col>
 
                     <v-col cols="6">
-                      <v-text-field v-model.number="editFormObject.contribution"
+                      <v-text-field v-model="editFormObject.contribution"
                                     label="勋章数"></v-text-field>
                     </v-col>
 
@@ -134,13 +136,6 @@
         mdi-delete
       </v-icon>
     </template>
-
-    <!-- 暂无数据 -->
-    <template v-slot:no-data>
-      <v-btn color="primary">
-        导入数据
-      </v-btn>
-    </template>
   </v-data-table>
 </template>
 <script>
@@ -161,7 +156,7 @@ export default {
         // formItem:允许被编辑新增？
       */
       { text: '称呼', align: 'start', value: 'name', },
-      { text: '联系方式', value: 'howContact' },
+      // { text: '联系方式', value: 'howContact' },
       { text: '游戏ID', value: 'ID' },
       { text: '斗技分', value: 'rank' },
       { text: '勋章数', value: 'contribution' },
@@ -171,7 +166,7 @@ export default {
     ],
     formRule: {
       name: [v => !!v || '称呼必填'],
-      ID: [v => Number(v) || '游戏ID必填，且须是数字']
+      ID: [v => !isNaN(v) || '游戏ID必填，且须是数字']
     },
 
     editedIndex: -1, // 当前编辑的行
@@ -210,7 +205,6 @@ export default {
   },
 
   methods: {
-
     // 编辑，
     /*
         传入行数据

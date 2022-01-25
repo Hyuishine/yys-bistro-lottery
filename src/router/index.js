@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:41:29
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-17 22:21:46
+ * @LastEditTime: 2022-01-26 00:53:43
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -15,14 +15,14 @@ Vue.use(Router)
 const routes = [
     {
         path: '/',
-        redirect: '/home',
+        redirect: '/help',
         component: resolve => require(['@/view/layout'], resolve),
         children: [
             {
                 // 首页
-                path: '/home',
-                name: 'home',
-                component: resolve => require(['@/view/home/index.vue'], resolve)
+                path: '/help',
+                name: 'help',
+                component: resolve => require(['@/view/help/index.vue'], resolve)
             },
 
             {
@@ -37,6 +37,13 @@ const routes = [
                 path: '/randomWheel',
                 name: 'randomWheel',
                 component: resolve => require(['@/view/random/wheel.vue'], resolve)
+            },
+
+            {
+                // 滚筒抽奖
+                path: '/randomRoller',
+                name: 'randomRoller',
+                component: resolve => require(['@/view/random/roller.vue'], resolve)
             },
 
             {

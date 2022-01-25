@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-09 14:28:22
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-24 22:04:21
+ * @LastEditTime: 2022-01-25 22:51:55
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -83,16 +83,9 @@ export default {
 
         // 设置
         settings: {
-            // 左侧 常规设置
-            normal: {
-                autoSub: true, // 自动去除已抽人员？
-                sendToTitile: true, // 自动发送到标题
-                addMaterial: true, // 自动添加材料(节目效果) 人员描述
-                autoRandom: false, // 自动抽奖：先抽奖品-获取到提供人数后,再抽对应的人数
-                jackportSettings: { //! 奖池设置
-                    curPeoples: [], // 本次可参与抽奖人员 数据格式同 canRandom 一致
-                    curGifts: [], // 本次奖池 数据格式同 lastGifts 一致
-                }
+            jackportSettings: { //! 奖池设置
+                curPeoples: [], // 本次可参与抽奖人员 数据格式同 canRandom 一致
+                curGifts: {}, // 本次奖池 数据格式同 lastGifts 一致
             }
         }
     }

@@ -2,7 +2,7 @@
  * @Author: 黄宇/Hyuishine
  * @Date: 2022-01-17 21:12:28
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-17 21:39:09
+ * @LastEditTime: 2022-01-25 21:17:17
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -29,7 +29,7 @@ export default {
   data: () => ({
     partData: [
       { title: '转盘', info: '幸运大转盘', path: '/randomWheel' },
-      { title: '滚筒', info: '滚筒老虎机' },
+      { title: '滚筒', info: '滚筒老虎机', path: '/randomRoller' },
       { title: '格子', info: '格子老虎机' },
       { title: '翻卡', info: '尝试做的类似于“秘境召唤”的抽卡' },
     ]
