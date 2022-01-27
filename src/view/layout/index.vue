@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:44:42
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-26 00:27:57
+ * @LastEditTime: 2022-01-27 12:57:40
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -14,13 +14,13 @@
     <v-container fluid>
       <v-main>
         <v-flex id="viewBox">
-          <v-row align="center"
-                 justify="center">
+          <v-row justify="center">
             <!--//! 顶部菜单 -->
             <v-col :lg="8"
                    :md="10"
                    :sm="12"
-                   :xs="12">
+                   :xs="12"
+                   class="header">
               <header-bar></header-bar>
             </v-col>
 
@@ -56,6 +56,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 #contentBox {
+  margin-top: 90px;
   max-height: calc(100vh - 100px);
+}
+.header {
+  position: fixed;
+  z-index: 9;
 }
 </style>
