@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 14:25:48
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-26 00:52:34
+ * @LastEditTime: 2022-01-27 11:07:52
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -55,10 +55,11 @@ export default {
     // 标题数据、按钮数据、按钮节流阀
     titleContent: '欢迎来到 “小酒馆” 五周年',
     btnData: [
-      { icon: 'mdi-help', color: 'primary', path: '', tips: '如何使用？' },
+      { icon: 'mdi-help', color: 'primary', path: '/help', tips: '如何使用？' },
       { icon: 'mdi-square-edit-outline', color: 'accent', path: '/dataEditor', tips: '编辑数据' },
       // { icon: 'mdi-chart-bar', color: 'pink lighten-3', path: '', tips: '展示数据' },
-      { icon: 'mdi-check-bold', color: 'success', path: '/random', tips: '选择抽奖工具' },
+      // { icon: 'mdi-check-bold', color: 'success', path: '/random', tips: '选择抽奖工具' },
+      { icon: 'mdi-check-bold', color: 'success', path: '/randomWheel', tips: '开始抽奖' },
     ],
     btnLoading: false
   }),
