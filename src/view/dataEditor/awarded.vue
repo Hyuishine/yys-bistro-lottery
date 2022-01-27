@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 18:11:30
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-26 00:50:26
+ * @LastEditTime: 2022-01-27 12:47:45
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -57,7 +57,7 @@ export default {
         filterable:允许被搜索？
         formItem:允许被编辑新增？
       */
-      { text: '中奖人称呼', align: 'start', value: 'winner', },
+      { text: '中奖人称呼', align: 'start', value: 'name', },
       { text: '所中奖品', value: 'giftName' },
       { text: '赞助人广告', value: 'sponsorAD' },
       { text: '操作', value: 'actions', sortable: false, formItem: false },
@@ -66,10 +66,10 @@ export default {
 
   computed: {
     listData () {  // 列表数据 从奖池数据中过滤出  有中奖人的 奖品
-      const source = this.$store.state.module.using.gifts
+      const source = this.$store.state.module.using.peoples
       return source.filter(
-        gift => {
-          return !!gift.winner
+        people => {
+          return people.awarded
         }
       )
     }
