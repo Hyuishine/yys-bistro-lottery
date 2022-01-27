@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-09 14:28:13
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-24 21:23:08
+ * @LastEditTime: 2022-01-27 13:20:03
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -81,7 +81,7 @@ export default {
         //! 当每行数据 中存在“称呼”的数据时，视为有效数据，则整理成人员数据
         sheetData.forEach((row) => {
 
-          if (row['称呼']) {
+          if (row['称呼'] && row['游戏ID']) {
             initData.push(
               {
                 name: row['称呼'],
