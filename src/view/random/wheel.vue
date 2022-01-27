@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2021-03-25 17:11:38
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-25 23:09:24
+ * @LastEditTime: 2022-01-27 12:41:20
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -101,7 +101,7 @@ export default {
       this.timer_start = setInterval(() => {
         this.scroll_Nums++
         // todo 这里可以控制快慢
-      }, 50)
+      }, 10)
     },
 
     // 停止转动
