@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-09 14:28:22
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-25 22:51:55
+ * @LastEditTime: 2022-01-27 12:47:32
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -54,7 +54,7 @@ export default {
                 //! 以下由后续计算获得
                 //     missTime: '中奖错过次数',
                 //     awarded: false // 是否中奖
-                //     prize:'所获奖品名称',
+                //     giftName:'所获奖品名称',
                 //     sponsorName: '赞助人名称' //
                 //     sponsorContact: '赞助人联系方式'
                 //     giftInfo:'奖品详情',
