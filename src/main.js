@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:24:33
  * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-26 09:19:03
+ * @LastEditTime: 2022-01-08 18:00:13
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -16,7 +16,6 @@ import Router from "vue-router";
 import XLSX from 'xlsx';
 import store from "./store/index";
 import JSZip from "jszip";
-import echarts from 'echarts'
 import animated from 'animate.css'
 
 Vue.use(animated)
@@ -24,7 +23,6 @@ Vue.use(XLSX)
 Vue.use(JSZip)
 
 Vue.config.productionTip = false
-Vue.prototype.$echarts = echarts
 
 const originalPush = Router.prototype.push;
 Router.prototype.push = function push (location) {

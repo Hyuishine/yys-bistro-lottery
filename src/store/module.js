@@ -1,14 +1,15 @@
 /*
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-17 10:12:36
- * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2021-04-01 17:06:22
+ * @LastEditors: 黄宇/Hyuishine
+ * @LastEditTime: 2022-01-24 19:57:36
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
  * @youWant: add you want
  */
-const file = require.context("@/view", true, /module.js$/);
+// 从各个文件夹找出module.js 去除里面的数据
+const file = require.context("@/", true, /data.js$/)
 let module = {
     state: {},
 };

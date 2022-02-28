@@ -1,8 +1,8 @@
 <!--
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:24:33
- * @LastEditors: 黄宇/hyuishine
- * @LastEditTime: 2020-12-22 16:17:24
+ * @LastEditors: 黄宇/Hyuishine
+ * @LastEditTime: 2022-01-27 11:54:38
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -14,11 +14,13 @@
   </div>
 </template>
 <style lang="scss">
-html {
-  overflow: auto;
-}
+html,
 body {
   margin: 0;
   padding: 0;
+  overflow: hidden !important;
+  #app {
+    overflow-y: auto;
+  }
 }
 </style>

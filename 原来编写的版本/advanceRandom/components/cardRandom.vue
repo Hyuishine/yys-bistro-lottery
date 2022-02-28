@@ -76,10 +76,13 @@ export default {
 
   },
   methods: {
-    shuffle: function () {
+
+    // 打乱数据
+    shuffle () {
       this.list = _.shuffle(this.list)
-      console.log(this.list)
     },
+
+    // 启动
     startRandom () {
       if (!this.randomStatus) {
         //! 开始
@@ -104,6 +107,7 @@ export default {
         this.start()
       }, this.speed)
     },
+
     stop () {
       //! 如果速度到最小速度了  不再减速
       if (this.speed < 1000) {

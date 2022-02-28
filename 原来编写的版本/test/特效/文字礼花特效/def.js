@@ -1,3 +1,13 @@
+/*
+ * @Author: 黄宇/hyuishine
+ * @Date: 2022-01-08 14:21:12
+ * @LastEditors: 黄宇/hyuishine
+ * @LastEditTime: 2022-01-08 15:52:36
+ * @Description: 
+ * @Email: hyuishine@gmail.com
+ * @Company: 3xData
+ * @youWant: add you want
+ */
 let dt = 0.1;//每帧表示的时间间隔
 
 //球体
@@ -47,7 +57,7 @@ class Timer {
         if (!this.step) {
             this.lastTime = Date.now();
             // this.label = new Date(this.lastTime).Format('hh:mm:ss');
-            this.label = '351'
+            this.label = '测试一下'
         }
     }
 
