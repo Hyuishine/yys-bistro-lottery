@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2021-03-25 17:11:38
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-02-28 15:52:10
+ * @LastEditTime: 2022-02-28 16:18:09
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -51,7 +51,7 @@
     <div id="jackport_container"
          :style="'transform:rotate(' + scroll_Nums * (360 / random_items.length) + 'deg);'">
 
-      <!-- 奖池 -->
+      <!-- 奖池 单个 -->
       <span v-for="(item, i) in random_items"
             :key="i"
             :style="'transform:rotate('+ i * (360 / random_items.length) + 'deg);--borderWdith:'+ ( 360 / random_items.length) * 4 +'px;'">
