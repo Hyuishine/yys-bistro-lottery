@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-09 14:28:13
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-27 13:20:03
+ * @LastEditTime: 2022-02-28 15:41:57
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -62,7 +62,6 @@ export default {
           }
 
           self.solvePeople(sheetData[0])
-          self.solveGifts(sheetData[1])
 
         };
         reader.readAsBinaryString(file[0]);
@@ -79,54 +78,22 @@ export default {
         let initData = []
 
         //! 当每行数据 中存在“称呼”的数据时，视为有效数据，则整理成人员数据
-        sheetData.forEach((row) => {
-
-          if (row['称呼'] && row['游戏ID']) {
-            initData.push(
-              {
-                name: row['称呼'],
-                howContact: row['联系方式'] || '',
-                ID: row['游戏ID'] || '',
-                rank: row['斗技分'] || '',
-                contribution: row['勋章数'] || '',
-                missTime: 0, // 中将错过次数
-                awarded: false // 是否中奖
-              }
-            )
-          }
-        })
-
-        // 存储元数据 备用
-        if (initData.length !== 0) {
-          this.$store.state.module.sheetData.peoples = initData // 初始数据备份
-          this.$store.state.module.using.peoples = initData // 总人员数据
-        }
-      } catch (error) {
-        alert('数据错误' + error)
-      }
-    },
-
-    //! 处理奖池数据
-    solveGifts (sheetData) {
-      try {
-        // 数据详情见：@\view\data\data.js
-        let initData = []
-
-        // 初始化数据 只有一张表
         sheetData.forEach((row, i) => {
 
-          if (row['称呼'] && row['赞助奖品名称']) {
-            // 获取元数据
+          if (row['称呼']) {
             initData.push(
               {
                 name: row['称呼'],
                 howContact: row['联系方式'] || '',
-                giftName: row['赞助奖品名称'] || '',
-                giftAmount: row['赞助数量'] || 1,
-                remaining: row['赞助数量'] || 1,
-                giftInfo: row['奖品详情'] || '',
-                sponsorAD: row['赞助人广告'] || '',
-                giftID: idCreator(row, i),
+                ID: idCreator(row, i),
+                rank: row['斗技分'] || '',
+                contribution: row['勋章数'] || '',
+                awarded: false, // 是否中奖
+                missTime: 0, // 错过中奖次数
+                giftName: '', // 所获奖品名称
+                sponsorName: '', // 奖品赞助人名称
+                sponsorContact: '', // 赞助人联系方式
+                giftInfo: '' // 奖品详情
               }
             )
           }
@@ -134,11 +101,11 @@ export default {
 
         // 存储元数据 备用
         if (initData.length !== 0) {
-          this.$store.state.module.sheetData.gifts = initData // 初始数据备份
-          this.$store.state.module.using.gifts = initData // 总人员数据
+          this.$store.state.module.sheetData = initData // 初始数据备份
+          this.$store.state.module.using = initData // 总人员数据
         }
       } catch (error) {
-        alert('数据错误' + error)
+        alert('数据错误，请参照模板导入' + error)
       }
     }
   }

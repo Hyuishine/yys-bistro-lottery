@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 14:36:24
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-26 00:35:35
+ * @LastEditTime: 2022-02-28 15:35:15
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -44,7 +44,7 @@
         <template>
           <v-list-item-content>
             <v-list-item-title v-html="data.item.name"></v-list-item-title>
-            <v-list-item-subtitle v-html="'斗技分' + data.item.rank + ',周勋章:' + data.item.rank"></v-list-item-subtitle>
+            <v-list-item-subtitle v-html="'斗技分' + data.item.rank + ',周勋章:' + data.item.contribution"></v-list-item-subtitle>
           </v-list-item-content>
         </template>
       </template>
@@ -81,18 +81,18 @@ export default {
   },
 
   computed: {
-    // 从所有奖品中过滤出剩余数量大于0的，
+    // 返回所有人员
     peoples () {
-      return this.$store.state.module.using.peoples || []
+      return this.$store.state.module.using|| []
     },
 
     // 已选中的参与人
     selected: {
       get () {
-        return this.$store.state.module.settings.jackportSettings.curPeoples
+        return this.$store.state.module.curPeoples
       },
       set (n) {
-        this.$store.state.module.settings.jackportSettings.curPeoples = n
+        this.$store.state.module.curPeoples = n
       }
     },
   }

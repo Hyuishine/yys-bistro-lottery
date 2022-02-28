@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2021-03-25 17:11:38
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-27 12:41:20
+ * @LastEditTime: 2022-02-28 15:52:10
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -70,7 +70,7 @@
   </div>
 </template>
 <script>
-import { logWinner, hasCurGift } from "../../utils/public"
+import { logWinner } from "../../utils/public"
 
 export default {
   name: 'components_randomwheel',
@@ -86,7 +86,7 @@ export default {
 
     // 开始 停止 切换
     toogleRandom () {
-      if (!this.scroll_status && hasCurGift()) {
+      if (!this.scroll_status) {
         //! 开始
         this.start()
       } else if (this.scroll_status) {
@@ -140,19 +140,13 @@ export default {
 
     // 当前随机项
     random_items () {
-      const jackport = this.$store.state.module.settings.jackportSettings
+      const jackport = this.$store.state.module.curPeoples
 
       // 选定的人员
-      if (jackport.curPeoples.length !== 0) {
-        return jackport.curPeoples
+      if (jackport.length !== 0) {
+        return jackport
       } else {
-        return this.$store.state.module.using.peoples
-        // // 剩余全部可抽奖人员
-        // return this.$store.state.module.using.peoples.filter(
-        //   people => {
-        //     return people.awarded || people
-        //   }
-        // )
+        return this.$store.state.module.using
       }
     }
   }
