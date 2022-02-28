@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 14:36:24
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-26 00:47:58
+ * @LastEditTime: 2022-02-28 15:24:44
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -51,8 +51,6 @@
 </template>
 <script>
 import peoples from '../dataEditor/peoples.vue'
-import gifts from '../dataEditor/gifts.vue'
-import lastGifts from '../dataEditor/lastGifts.vue'
 import awarded from '../dataEditor/awarded.vue'
 
 export default {
@@ -62,8 +60,6 @@ export default {
     activeTab: null,
     tabData: [
       { name: '人员', icon: 'mdi-emoticon-cool-outline', module: peoples },
-      { name: '总奖池', icon: 'mdi-gift-outline', module: gifts },
-      { name: '剩余奖品', icon: 'mdi-gift-open-outline', module: lastGifts },
       { name: '获奖数据', icon: 'mdi-party-popper', module: awarded }
     ]
   })

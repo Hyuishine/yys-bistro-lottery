@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:44:42
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-27 12:57:40
+ * @LastEditTime: 2022-02-28 15:26:31
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -35,7 +35,6 @@
           </v-row>
 
           <left></left>
-          <right></right>
           <bottom></bottom>
         </v-flex>
       </v-main>
@@ -44,14 +43,13 @@
 </template>
 <script>
 import left from '../sideBar/left.vue'
-import right from '../sideBar/right.vue'
 import bottom from '../sideBar/bottom.vue'
 
 import headerBar from '../header'
 
 export default {
   name: 'layout',
-  components: { headerBar, left, right, bottom }
+  components: { headerBar, left, bottom }
 }
 </script>
 <style lang="scss" scoped>
