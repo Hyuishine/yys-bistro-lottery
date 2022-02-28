@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 18:11:30
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-26 00:51:27
+ * @LastEditTime: 2022-02-28 16:07:46
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -68,19 +68,14 @@
                     </v-col>
 
                     <v-col cols="6">
-                      <v-text-field v-model="editFormObject.ID"
-                                    label="游戏ID"
-                                    :rules="formRule.ID"></v-text-field>
-                    </v-col>
-
-                    <v-col cols="6">
                       <v-text-field v-model="editFormObject.rank"
                                     label="斗技分"></v-text-field>
                     </v-col>
 
                     <v-col cols="6">
                       <v-text-field v-model="editFormObject.contribution"
-                                    label="勋章数"></v-text-field>
+                                    label="勋章数"
+                                    :rules="formRule.contribution"></v-text-field>
                     </v-col>
 
                   </v-row>
@@ -156,33 +151,31 @@ export default {
         // formItem:允许被编辑新增？
       */
       { text: '称呼', align: 'start', value: 'name', },
-      // { text: '联系方式', value: 'howContact' },
-      { text: '游戏ID', value: 'ID' },
+      { text: '联系方式', value: 'howContact' },
       { text: '斗技分', value: 'rank' },
       { text: '勋章数', value: 'contribution' },
       { text: '已中奖', value: 'awarded' },
-      { text: '中奖错过次数', value: 'missTime' },
+      { text: '唯一标识', value: 'ID' },
       { text: '操作', value: 'actions', sortable: false },
     ],
     formRule: {
       name: [v => !!v || '称呼必填'],
-      ID: [v => !isNaN(v) || '游戏ID必填，且须是数字']
+      contribution: [v => !isNaN(v) || '勋章数需为数字']
     },
 
     editedIndex: -1, // 当前编辑的行
     editFormObject: { // 编辑 表单的绑定项 设定的默认值 需要与下方defaultItem一致
       name: '',
       howContact: '',
-      ID: null,
+      ID: '',
       rank: 1000,
       contribution: 0,
       awarded: false,
-      missTime: 0,
     },
     defaultItem: { // 新增时的 默认值
       rank: 1000,
+      contribution: 0,
       awarded: false,
-      missTime: 0,
     },
   }),
 
@@ -191,7 +184,7 @@ export default {
       return this.editedIndex === -1 ? '新增' : '编辑'
     },
     listData () {  // 列表数据
-      return this.$store.state.module.using.peoples
+      return this.$store.state.module.using
     }
   },
 
@@ -201,7 +194,7 @@ export default {
     },
     dialogDelete (val) { // false 时关闭 删除提示弹窗
       val || this.closeDelete()
-    },
+    }
   },
 
   methods: {
@@ -255,9 +248,10 @@ export default {
           Object.assign(this.listData[this.editedIndex], this.editFormObject)
         } else {
           // 新增
-          this.editFormObject.peopleID = idCreator(this.editFormObject, this.listData.length)
+          this.editFormObject.ID = idCreator(this.editFormObject, this.listData.length)
           this.listData.push(this.editFormObject)
         }
+        this.close()
       }
     }
   }
