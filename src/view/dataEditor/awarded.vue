@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2022-01-08 18:11:30
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-02-28 15:45:48
+ * @LastEditTime: 2022-03-03 23:05:13
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -11,7 +11,7 @@
 <template>
   <v-data-table :headers="headers"
                 :items="listData"
-                height="500px"
+                height="530px"
                 fixed-header
                 no-results-text="没有搜索到。"
                 no-data-text="暂时没有人中奖。"

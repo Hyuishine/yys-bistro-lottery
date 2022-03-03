@@ -27,11 +27,11 @@
             width: 0px;
             border: 25px solid transparent;
             border-bottom-style: solid;
-            border-bottom-width: 70px;
+            border-bottom-width: 150px;
             position: absolute;
             background: transparent;
             border-bottom-color: #f48fb1;
-            top: 45%;
+            top: 40%;
             left: 50%;
         }
     }
@@ -108,10 +108,15 @@
     position: absolute;
     transition: 0.5s;
     z-index: 2;
+    width: 80%;
     transform: translate(-50%, -50%);
-    top: 50%;
+    top: 55%;
     left: 50%;
     animation: showAwarded 0.2s forwards;
+
+    .align-center {
+       text-align: center;
+   }
 }
 
 @keyframes showAwarded {
