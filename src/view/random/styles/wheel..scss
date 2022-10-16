@@ -112,11 +112,8 @@
     transform: translate(-50%, -50%);
     top: 55%;
     left: 50%;
-    animation: showAwarded 0.2s forwards;
+    animation: showAwarded 2s forwards;
 
-    .align-center {
-       text-align: center;
-   }
 }
 
 @keyframes showAwarded {

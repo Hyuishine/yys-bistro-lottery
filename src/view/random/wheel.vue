@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2021-03-25 17:11:38
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-03-03 23:11:17
+ * @LastEditTime: 2022-10-16 17:50:55
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -65,7 +65,7 @@
             v-if="status_awarded">
       <v-card-text>
         <!-- 中奖人名字 -->
-        <div class="text-h2 align-center">{{  currentSelect.name }}</div>
+        <div class="text-h2 text-center font-weight-bold">{{  currentSelect.name }}</div>
 
         <v-form ref="peoplesForm"
                 lazy-validation>
@@ -93,8 +93,10 @@
           </v-row>
         </v-form>
 
+        <!-- 底部操作栏 -->
         <v-card-actions>
           <v-spacer></v-spacer>
+
           <v-btn color="primary"
                  text
                  @click="status_awarded = !status_awarded">
@@ -104,7 +106,7 @@
           <v-btn color="primary"
                  dark
                  @click="btn_save()">
-            保存
+            保存中奖数据
           </v-btn>
         </v-card-actions>
       </v-card-text>
@@ -128,7 +130,7 @@ export default {
         sponsorName: '', // 奖品赞助人名称
         sponsorContact: '', // 赞助人联系方式
         giftInfo: '', // 奖品详情
-      }
+      },
     }
   },
   methods: {
