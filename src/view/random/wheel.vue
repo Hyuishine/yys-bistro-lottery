@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2021-03-25 17:11:38
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-02-28 16:18:09
+ * @LastEditTime: 2022-03-03 23:11:17
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -60,11 +60,54 @@
       </span>
     </div>
 
-    <v-card class="awardedBar">
-      <v-card-title class="text-h2"
-                    title="双击关闭"
-                    v-if="status_awarded"
-                    @dblclick="status_awarded = !status_awarded">{{  currentSelect.name }}</v-card-title>
+    <!--//! 中奖展牌 -->
+    <v-card class="awardedBar"
+            v-if="status_awarded">
+      <v-card-text>
+        <!-- 中奖人名字 -->
+        <div class="text-h2 align-center">{{  currentSelect.name }}</div>
+
+        <v-form ref="peoplesForm"
+                lazy-validation>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field v-model="form.giftName"
+                            label="所获奖品名称"></v-text-field>
+            </v-col>
+
+            <v-col cols="6">
+              <v-text-field v-model="form.sponsorName"
+                            label="赞助人名称"></v-text-field>
+            </v-col>
+
+            <v-col cols="6">
+              <v-text-field v-model="form.sponsorContact"
+                            label="赞助人联系方式"></v-text-field>
+            </v-col>
+
+            <v-col cols="12">
+              <v-textarea v-model="form.giftInfo"
+                          type="textarea"
+                          label="奖品详情"></v-textarea>
+            </v-col>
+          </v-row>
+        </v-form>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary"
+                 text
+                 @click="status_awarded = !status_awarded">
+            取消保存
+          </v-btn>
+
+          <v-btn color="primary"
+                 dark
+                 @click="btn_save()">
+            保存
+          </v-btn>
+        </v-card-actions>
+      </v-card-text>
     </v-card>
 
   </div>
@@ -80,18 +123,28 @@ export default {
       scroll_status: false, // 是否正在滚动
       timer_start: null, // 控制滚动频率的定时器
       status_awarded: false, // 是否显示中奖信息
+      form: {
+        giftName: '', // 所获奖品名称
+        sponsorName: '', // 奖品赞助人名称
+        sponsorContact: '', // 赞助人联系方式
+        giftInfo: '', // 奖品详情
+      }
     }
   },
   methods: {
 
     // 开始 停止 切换
     toogleRandom () {
-      if (!this.scroll_status) {
-        //! 开始
-        this.start()
-      } else if (this.scroll_status) {
-        //! 停止
-        this.stop()
+      if (this.random_items.length !== 0) {
+        if (!this.scroll_status) {
+          //! 开始
+          this.start()
+        } else if (this.scroll_status) {
+          //! 停止
+          this.stop()
+        }
+      } else {
+        alert('当前没有人员数据了，是未新增或导入？还是已经全部抽完？')
       }
     },
 
@@ -112,9 +165,14 @@ export default {
       this.scroll_status = false
 
       this.status_awarded = true
+    },
 
-      logWinner(this.currentSelect)
+    // 手动记录中奖信息
+    btn_save () {
+      logWinner(this.currentSelect, this.form)
+      this.status_awarded = !this.status_awarded
     }
+
   },
   computed: {
     // 当前选中
@@ -146,7 +204,7 @@ export default {
       if (jackport.length !== 0) {
         return jackport
       } else {
-        return this.$store.state.module.using
+        return this.$store.state.module.using.filter(people => !people.awarded)
       }
     }
   }

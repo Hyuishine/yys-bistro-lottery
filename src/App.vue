@@ -2,7 +2,7 @@
  * @Author: 黄宇/hyuishine
  * @Date: 2020-12-09 22:24:33
  * @LastEditors: 黄宇/Hyuishine
- * @LastEditTime: 2022-01-27 11:54:38
+ * @LastEditTime: 2022-03-03 22:19:30
  * @Description: 
  * @Email: hyuishine@gmail.com
  * @Company: 3xData
@@ -20,7 +20,7 @@ body {
   padding: 0;
   overflow: hidden !important;
   #app {
-    overflow-y: auto;
+    // overflow-y: auto;
   }
 }
 </style>
